@@ -6,31 +6,63 @@
 const SAVE_KEY = 'mathpet_save_v1';
 const QUIZ_LENGTH = 10;
 
-// 펫 성장 단계 (xp 기준). 이미지는 assets/ 폴더에 넣으면 자동으로 이모지 대신 사용됨
+// 펫 성장 단계 (xp 기준). 캐릭터: 피그미 다람쥐
+// 이미지 규칙 (assets/):
+//   pet_<stage>_<pose>.png  단계별 포즈 (있으면 최우선)
+//   pet_<pose>.png          공통 포즈 (idle/eat/happy/sleep) - 어른 단계 기본 모습
+//   pet_<stage>.png         단계별 기본 모습
+// 없는 파일은 자동으로 다음 후보 → 마지막엔 이모지
 const STAGES = [
-  { key: 'egg',    name: '알',     emoji: '🥚', xp: 0 },
-  { key: 'baby',   name: '아기',   emoji: '🐣', xp: 100 },
-  { key: 'child',  name: '어린이', emoji: '🐥', xp: 300 },
-  { key: 'teen',   name: '청소년', emoji: '🦖', xp: 700 },
-  { key: 'adult',  name: '어른',   emoji: '🐲', xp: 1300 },
-  { key: 'legend', name: '전설',   emoji: '🐉', xp: 2200 },
+  { key: 'acorn',  name: '도토리', emoji: '🌰', xp: 0 },
+  { key: 'baby',   name: '아기',   emoji: '🐿️', xp: 100 },
+  { key: 'child',  name: '어린이', emoji: '🐿️', xp: 300 },
+  { key: 'teen',   name: '청소년', emoji: '🐿️', xp: 700 },
+  { key: 'adult',  name: '어른',   emoji: '🐿️', xp: 1300 },
+  { key: 'legend', name: '전설',   emoji: '👑', xp: 2200 },
 ];
 const STAGE_DESC = {
-  egg: '따뜻하게 돌봐주면 곧 깨어나요',
-  baby: '알에서 태어났어요! 아직 아기예요',
-  child: '씩씩하게 자라는 중이에요',
+  acorn: '도토리 속에서 새근새근 자고 있어요',
+  baby: '도토리에서 나왔어요! 아직 아기 다람쥐예요',
+  child: '가방 메고 씩씩하게 자라는 중이에요',
   teen: '힘이 세졌어요! 공부도 척척',
-  adult: '늠름한 어른이 되었어요',
-  legend: '전설의 수학 펫! 최고 단계예요',
+  adult: '늠름한 어른 다람쥐가 되었어요',
+  legend: '전설의 수학 다람쥐! 최고 단계예요',
 };
-const PET_IMAGES = {
-  egg: 'assets/pet_egg.png',
-  baby: 'assets/pet_baby.png',
-  child: 'assets/pet_child.png',
-  teen: 'assets/pet_teen.png',
-  adult: 'assets/pet_adult.png',
-  legend: 'assets/pet_legend.png',
-};
+const POSES = ['idle', 'eat', 'happy', 'sleep'];
+
+// 꾸미기 아이템 (cat: hat 모자 / outfit 옷 / acc 악세사리 / furniture 가구)
+// pos: 펫 이미지 기준 위치(%), r: 펫 높이 대비 크기
+const ITEM_CATS = { hat: '모자', outfit: '옷', acc: '악세사리', furniture: '가구' };
+const ITEMS = [
+  { id: 'ribbon',   cat: 'hat', name: '리본',      emoji: '🎀', price: 50,  pos: { x: 68, y: 6 },  r: 0.22 },
+  { id: 'cap',      cat: 'hat', name: '야구모자',  emoji: '🧢', price: 60,  pos: { x: 50, y: 2 },  r: 0.3 },
+  { id: 'tophat',   cat: 'hat', name: '신사 모자', emoji: '🎩', price: 120, pos: { x: 50, y: -2 }, r: 0.3 },
+  { id: 'gradcap',  cat: 'hat', name: '학사모',    emoji: '🎓', price: 150, pos: { x: 50, y: 0 },  r: 0.3 },
+  { id: 'crown',    cat: 'hat', name: '왕관',      emoji: '👑', price: 300, pos: { x: 50, y: -2 }, r: 0.28 },
+
+  { id: 'tshirt',   cat: 'outfit', name: '티셔츠', emoji: '👕', price: 70,  pos: { x: 50, y: 62 }, r: 0.3 },
+  { id: 'vest',     cat: 'outfit', name: '조끼',   emoji: '🦺', price: 80,  pos: { x: 50, y: 62 }, r: 0.3 },
+  { id: 'dress',    cat: 'outfit', name: '원피스', emoji: '👗', price: 90,  pos: { x: 50, y: 66 }, r: 0.32 },
+  { id: 'dobok',    cat: 'outfit', name: '도복',   emoji: '🥋', price: 130, pos: { x: 50, y: 62 }, r: 0.3 },
+  { id: 'coat',     cat: 'outfit', name: '코트',   emoji: '🧥', price: 150, pos: { x: 50, y: 62 }, r: 0.32 },
+
+  { id: 'balloon',  cat: 'acc', name: '풍선',     emoji: '🎈', price: 40,  pos: { x: 92, y: 10 }, r: 0.3 },
+  { id: 'glasses',  cat: 'acc', name: '안경',     emoji: '👓', price: 60,  pos: { x: 50, y: 33 }, r: 0.28 },
+  { id: 'scarf',    cat: 'acc', name: '목도리',   emoji: '🧣', price: 70,  pos: { x: 50, y: 52 }, r: 0.26 },
+  { id: 'sunglass', cat: 'acc', name: '선글라스', emoji: '🕶️', price: 90,  pos: { x: 50, y: 33 }, r: 0.28 },
+  { id: 'bag',      cat: 'acc', name: '가방',     emoji: '🎒', price: 110, pos: { x: 12, y: 60 }, r: 0.28 },
+  { id: 'medal',    cat: 'acc', name: '메달',     emoji: '🏅', price: 180, pos: { x: 50, y: 60 }, r: 0.22 },
+
+  { id: 'plant',    cat: 'furniture', name: '화분',   emoji: '🪴', price: 60,  pos: { x: 8,  y: 92 }, r: 0.42 },
+  { id: 'teddy',    cat: 'furniture', name: '곰인형', emoji: '🧸', price: 80,  pos: { x: 90, y: 92 }, r: 0.36 },
+  { id: 'lamp',     cat: 'furniture', name: '램프',   emoji: '💡', price: 70,  pos: { x: 90, y: 22 }, r: 0.3 },
+  { id: 'frame',    cat: 'furniture', name: '액자',   emoji: '🖼️', price: 90,  pos: { x: 10, y: 22 }, r: 0.34 },
+  { id: 'bed',      cat: 'furniture', name: '침대',   emoji: '🛏️', price: 150, pos: { x: 20, y: 70 }, r: 0.5 },
+  { id: 'sofa',     cat: 'furniture', name: '소파',   emoji: '🛋️', price: 200, pos: { x: 82, y: 70 }, r: 0.5 },
+  { id: 'tree',     cat: 'furniture', name: '트리',   emoji: '🎄', price: 250, pos: { x: 88, y: 48 }, r: 0.6 },
+  { id: 'house',    cat: 'furniture', name: '나무집', emoji: '🏠', price: 400, pos: { x: 12, y: 48 }, r: 0.6 },
+];
+const ITEM_BY_ID = Object.fromEntries(ITEMS.map(i => [i.id, i]));
 
 const FOODS = {
   apple:  { name: '사과',   emoji: '🍎', hunger: 20, happy: 5,  xp: 5,  price: 10 },
@@ -101,6 +133,7 @@ function defaultSave() {
     food: { apple: 2, cookie: 0, cake: 0 },
     attend: { lastDate: null, total: 0, cycleDay: 0, streak: 0 },
     album: {},            // 단계 key -> 달성 날짜
+    items: { owned: {}, equip: { hat: null, outfit: null, acc: null, furniture: {} } },
     stats: {
       correct: 0, wrong: 0,
       byTopic: { add: [0, 0], sub: [0, 0], mul: [0, 0], div: [0, 0] },
@@ -118,6 +151,7 @@ function load() {
     if (raw) deepMerge(S, JSON.parse(raw));
   } catch (e) { /* 저장 데이터 손상 시 새로 시작 */ }
   // 이전 버전 저장 데이터 보정
+  if (S.album.egg) { S.album.acorn = S.album.acorn || S.album.egg; delete S.album.egg; }
   STAGES.forEach(s => { if (S.xp >= s.xp && !S.album[s.key]) S.album[s.key] = todayStr(); });
   if (petLevel() > S.lastLevelSeen) S.lastLevelSeen = petLevel();
 }
@@ -203,25 +237,76 @@ function tickPet() {
 }
 
 // 이미지 파일이 있으면 이미지, 없으면 이모지
-const imgOk = {};
+const imgOk = {};   // path -> true/false
 let ready = false;
 function probeImages() {
-  Object.entries(PET_IMAGES).forEach(([key, src]) => {
+  const paths = new Set();
+  STAGES.forEach(s => { paths.add(`assets/pet_${s.key}.png`); POSES.forEach(p => paths.add(`assets/pet_${s.key}_${p}.png`)); });
+  POSES.forEach(p => paths.add(`assets/pet_${p}.png`));
+  const all = [...paths].map(src => new Promise(res => {
     const im = new Image();
-    im.onload = () => { imgOk[key] = true; if (ready) render(); };
-    im.onerror = () => { imgOk[key] = false; };
+    im.onload = () => { imgOk[src] = true; if (ready) render(); res(); };
+    im.onerror = () => { imgOk[src] = false; res(); };
     im.src = src;
-  });
+  }));
+  // 이미지 확인이 끝나거나 2초가 지나면 진행
+  return Promise.race([Promise.all(all), new Promise(res => setTimeout(res, 2000))]);
 }
-function stageImg(st, cls = '') {
-  return imgOk[st.key]
-    ? `<img class="${cls}" src="${PET_IMAGES[st.key]}" alt="${st.name}">`
+// 단계+포즈에 맞는 이미지 경로 (없으면 null)
+function petImagePath(stageKey, pose) {
+  const c = [`assets/pet_${stageKey}_${pose}.png`];
+  if (stageKey === 'adult' || stageKey === 'legend') c.push(`assets/pet_${pose}.png`);
+  c.push(`assets/pet_${stageKey}.png`);
+  if (stageKey === 'adult' || stageKey === 'legend') c.push('assets/pet_idle.png');
+  return c.find(p => imgOk[p]) || null;
+}
+function stageImg(st, cls = '', pose = 'idle') {
+  const src = petImagePath(st.key, pose);
+  const glow = st.key === 'legend' && !imgOk[`assets/pet_legend.png`] ? ' legend-glow' : '';
+  return src
+    ? `<img class="${cls}${glow}" src="${src}" alt="${st.name}">`
     : `<span class="pet-emoji ${cls}">${st.emoji}</span>`;
 }
-function petHTML() {
+
+// 포즈: 기본은 기분에 따라 idle/sleep, 반응은 잠깐 다른 포즈
+let reactPose = null, reactTimer = null;
+function basePose() { return mood() === 'sad' ? 'sleep' : 'idle'; }
+function currentPose() { return reactPose || basePose(); }
+function react(pose, ms = 1500) {
+  reactPose = pose;
+  clearTimeout(reactTimer);
+  $$('.pet-slot').forEach(s => { if (s.closest('.screen.active')) s.innerHTML = petHTML(); });
+  reactTimer = setTimeout(() => { reactPose = null; $$('.pet-slot').forEach(s => { if (s.closest('.screen.active')) s.innerHTML = petHTML(); }); }, ms);
+}
+
+// 착용 아이템 오버레이 (모자/옷/악세사리)
+function wearablesHTML() {
+  const eq = S.items.equip;
+  return ['outfit', 'acc', 'hat'].map(slot => {
+    const it = eq[slot] && ITEM_BY_ID[eq[slot]];
+    if (!it) return '';
+    return `<span class="wear" style="left:${it.pos.x}%;top:${it.pos.y}%;--r:${it.r}">${it.emoji}</span>`;
+  }).join('');
+}
+// 가구 오버레이 (펫 카드 배경)
+function furnitureHTML() {
+  return Object.keys(S.items.equip.furniture).filter(id => S.items.equip.furniture[id] && ITEM_BY_ID[id]).map(id => {
+    const it = ITEM_BY_ID[id];
+    return `<span class="furn" style="left:${it.pos.x}%;top:${it.pos.y}%;--r:${it.r}">${it.emoji}</span>`;
+  }).join('');
+}
+function renderFurniture(screenEl) {
+  const host = $('.pet-stage', screenEl);
+  if (!host) return;
+  let layer = $('.furn-layer', host);
+  if (!layer) { layer = document.createElement('div'); layer.className = 'furn-layer'; host.prepend(layer); }
+  layer.innerHTML = furnitureHTML();
+}
+
+function petHTML(pose = currentPose()) {
   const st = stage();
   const m = mood();
-  return `<div class="pet-wrap ${m}" style="--grow:${growScale()}">${stageImg(st)}<span class="mood-badge">${MOOD_EMOJI[m]}</span></div>`;
+  return `<div class="pet-wrap ${m} pose-${pose}" style="--grow:${growScale()}">${stageImg(st, '', pose)}${wearablesHTML()}<span class="mood-badge">${MOOD_EMOJI[m]}</span></div>`;
 }
 function popPet(slot) {
   const w = slot.querySelector('.pet-wrap');
@@ -257,7 +342,7 @@ function showEvolve() {
   SFX.evolve();
   showModal({
     title: '🎉 진화했어요!',
-    html: `<span class="big-emoji">${stageImg(st, 'evo')}</span>${S.pet.name}이(가) <b>${st.name}</b> 단계가 되었어요!<br><small>${STAGE_DESC[st.key]}</small>${bonusTxt}`,
+    html: `<span class="big-emoji">${stageImg(st, 'evo', 'happy')}</span>${S.pet.name}이(가) <b>${st.name}</b> 단계가 되었어요!<br><small>${STAGE_DESC[st.key]}</small>${bonusTxt}`,
     buttons: [
       { label: '멋지다!', cls: 'primary', onClick: () => render() },
       { label: '📔 성장 앨범 보기', onClick: () => go('album') },
@@ -323,7 +408,7 @@ function go(name) {
 function render(name = current) {
   const map = {
     home: renderHome, study: renderStudy, quiz: renderQuiz,
-    pet: renderPetScreen, gugudan: renderGugudan, settings: renderSettings, album: renderAlbum,
+    pet: renderPetScreen, gugudan: renderGugudan, settings: renderSettings, album: renderAlbum, shop: renderShop,
   };
   if (map[name]) map[name]();
 }
@@ -358,9 +443,54 @@ function renderHome() {
   $('#home-speech').textContent = petSpeech();
   renderXp($('#home-xp-fill'), $('#home-xp-text'), $('#home-pet-level'), $('#home-stage-name'));
   renderBars(el);
+  renderFurniture(el);
   const needs = S.pet.hunger < 30 || S.pet.happy < 30 || S.pet.clean < 30;
   $('#pet-alert').classList.toggle('hidden', !needs);
   $('#attend-day').textContent = S.attend.cycleDay;
+}
+
+/* ================= 꾸미기 상점 ================= */
+let shopCat = 'hat';
+function isEquipped(it) {
+  const eq = S.items.equip;
+  return it.cat === 'furniture' ? !!eq.furniture[it.id] : eq[it.cat] === it.id;
+}
+function renderShop() {
+  $('#shop-coins').textContent = S.coins;
+  $('#shop-pet').innerHTML = petHTML();
+  renderFurniture($('#screen-shop'));
+  $$('#shop-tabs button').forEach(b => b.classList.toggle('active', b.dataset.cat === shopCat));
+  $('#shop-grid').innerHTML = ITEMS.filter(i => i.cat === shopCat).map(it => {
+    const owned = !!S.items.owned[it.id];
+    const on = isEquipped(it);
+    let btn;
+    if (!owned) btn = `<button class="item-btn buy" data-buy-item="${it.id}" ${S.coins < it.price ? 'disabled' : ''}>🪙 ${it.price}</button>`;
+    else if (on) btn = `<button class="item-btn off" data-toggle-item="${it.id}">벗기</button>`;
+    else btn = `<button class="item-btn on" data-toggle-item="${it.id}">착용</button>`;
+    return `<div class="item-card ${owned ? 'owned' : ''} ${on ? 'equipped' : ''}">
+      <span class="i-emoji">${it.emoji}</span><span class="i-name">${it.name}</span>${btn}
+    </div>`;
+  }).join('');
+}
+function buyItem(id) {
+  const it = ITEM_BY_ID[id];
+  if (!it || S.items.owned[id]) return;
+  if (S.coins < it.price) { toast('코인이 부족해요. 문제를 풀어보자!'); return; }
+  S.coins -= it.price;
+  S.items.owned[id] = true;
+  equipItem(id, true);
+  SFX.coin();
+  toast(`${it.emoji} ${it.name} 샀어요! 바로 착용했어요`);
+}
+function equipItem(id, on) {
+  const it = ITEM_BY_ID[id];
+  if (!it || !S.items.owned[id]) return;
+  const eq = S.items.equip;
+  if (it.cat === 'furniture') { if (on) eq.furniture[id] = true; else delete eq.furniture[id]; }
+  else eq[it.cat] = on ? id : null;
+  save();
+  renderShop();
+  react('happy', 1200);
 }
 
 /* ================= 성장 앨범 ================= */
@@ -607,6 +737,7 @@ function submitAnswer() {
     Q.coins += gain; S.coins += gain; S.xp += 5;
     S.stats.correct++; stat[0]++;
     SFX.correct();
+    react('happy', 900);
     popPet($('#quiz-pet'));
     showFeedback(true, `정답! 🎉<br><small>🪙 +${gain}${Q.streak >= 3 ? ' (연속 보너스!)' : ''}</small>`);
     save();
@@ -671,6 +802,7 @@ function renderPetScreen() {
   $('#pet-speech').textContent = petSpeech();
   renderXp($('#pet-xp-fill'), $('#pet-xp-text'), $('#pet-level'), $('#pet-stage-name'));
   renderBars(el);
+  renderFurniture(el);
 
   $('#food-row').innerHTML = Object.entries(FOODS).map(([k, f]) =>
     `<button class="food-btn" data-feed="${k}" ${S.food[k] <= 0 ? 'disabled' : ''}>
@@ -704,6 +836,7 @@ function feed(key) {
     S.xp += f.xp;
     SFX.eat();
   });
+  react('eat', 1800);
   popPet($('#pet-pet'));
   $('#pet-speech').textContent = pick(['냠냠! 맛있어! 😋', '고마워!', '더 먹고 싶어!']);
   floatText($('#pet-pet'), `${f.emoji} +${f.xp} XP`);
@@ -727,6 +860,7 @@ function play() {
     S.xp += 3;
     SFX.correct();
   });
+  react('happy', 1500);
   popPet($('#pet-pet'));
   $('#pet-speech').textContent = pick(['재밌다! 🎈', '또 놀자!', '신난다~!']);
   floatText($('#pet-pet'), '🎈 +20');
@@ -740,6 +874,7 @@ function wash() {
     S.xp += 3;
     SFX.eat();
   });
+  react('happy', 1500);
   popPet($('#pet-pet'));
   $('#pet-speech').textContent = pick(['깨끗해졌다! ✨', '시원해~ 🛁', '반짝반짝!']);
   floatText($('#pet-pet'), '🛁 깨끗!');
@@ -846,7 +981,22 @@ function bind() {
   $('#btn-settings').onclick = () => { SFX.tap(); go('settings'); };
   $('#btn-attend').onclick = () => { SFX.tap(); showAttendance(checkAttendance()); };
   $('#btn-album').onclick = () => { SFX.tap(); go('album'); };
-  $('#home-pet').onclick = () => { popPet($('#home-pet')); SFX.tap(); $('#home-speech').textContent = petSpeech(); };
+  $('#btn-shop').onclick = () => { SFX.tap(); go('shop'); };
+
+  // 꾸미기 상점
+  $('#shop-tabs').addEventListener('click', e => {
+    const b = e.target.closest('button[data-cat]');
+    if (!b) return;
+    SFX.tap(); shopCat = b.dataset.cat; renderShop();
+  });
+  $('#shop-grid').addEventListener('click', e => {
+    const buy = e.target.closest('[data-buy-item]');
+    if (buy) { buyItem(buy.dataset.buyItem); return; }
+    const tg = e.target.closest('[data-toggle-item]');
+    if (tg) { SFX.tap(); const it = ITEM_BY_ID[tg.dataset.toggleItem]; equipItem(it.id, !isEquipped(it)); }
+  });
+  $('#shop-pet').onclick = () => { react('happy', 1200); SFX.tap(); };
+  $('#home-pet').onclick = () => { react('happy', 1200); popPet($('#home-pet')); SFX.tap(); $('#home-speech').textContent = petSpeech(); };
 
   // 공부 선택
   $$('#level-segment button').forEach(b => b.onclick = () => { S.settings.level = +b.dataset.level; save(); SFX.tap(); renderStudy(); });
@@ -875,7 +1025,7 @@ function bind() {
   $('#btn-play').onclick = play;
   $('#btn-wash').onclick = wash;
   $('#pet-pet').onclick = () => {
-    popPet($('#pet-pet')); SFX.tap();
+    react('happy', 1200); popPet($('#pet-pet')); SFX.tap();
     S.pet.happy = clamp(S.pet.happy + 1); save(); renderBars($('#screen-pet'));
     $('#pet-speech').textContent = pick(['히히 😆', '간지러워!', '안녕!', '좋아해!']);
   };
@@ -912,19 +1062,19 @@ function bind() {
 
 function showWelcome(attendedNow) {
   showModal({
-    title: '🥚 알을 발견했어요!',
-    html: `<span class="big-emoji">🥚</span>수학 문제를 풀면 <b>코인</b>과 <b>간식</b>을 받아요.<br>간식을 주고 놀아주면 알에서 멋진 친구가 태어나요!`,
+    title: '🌰 도토리를 발견했어요!',
+    html: `<span class="big-emoji">${stageImg(STAGES[0], 'evo')}</span>도토리 안에 아기 다람쥐가 자고 있어요!<br>수학 문제를 풀면 <b>코인</b>과 <b>간식</b>을 받아요.<br>간식을 주고 놀아주면 멋진 다람쥐로 자라요!`,
     buttons: [{ label: '시작하기!', cls: 'primary', onClick: () => { S.tutorialSeen = true; save(); if (attendedNow) showAttendance(true); } }],
   });
 }
 
 /* ================= 시작 ================= */
-function init() {
+async function init() {
   load();
   tickPet();
   save();
   bind();
-  probeImages();
+  await probeImages();
   ready = true;
   go('home');
   const attended = checkAttendance();

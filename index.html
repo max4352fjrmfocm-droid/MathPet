@@ -44,13 +44,34 @@
       <button class="big-btn primary xl" id="btn-study">📚 공부하기</button>
       <div class="row">
         <button class="big-btn" id="btn-pet">🐾 돌봐주기 <span class="badge hidden" id="pet-alert">!</span></button>
-        <button class="big-btn" id="btn-gugudan">✖️ 구구단표</button>
+        <button class="big-btn" id="btn-shop">🛍️ 꾸미기</button>
       </div>
       <div class="row">
-        <button class="big-btn sub" id="btn-attend">📅 출석 도장 <small><span id="attend-day">0</span>/7</small></button>
-        <button class="big-btn sub" id="btn-album">📔 성장 앨범</button>
+        <button class="big-btn sub" id="btn-gugudan">✖️ 구구단</button>
+        <button class="big-btn sub" id="btn-attend">📅 출석 <small><span id="attend-day">0</span>/7</small></button>
+        <button class="big-btn sub" id="btn-album">📔 앨범</button>
       </div>
     </nav>
+  </section>
+
+  <!-- ===== 꾸미기 상점 ===== -->
+  <section class="screen" id="screen-shop">
+    <header class="topbar">
+      <button class="icon-btn back" data-go="home" aria-label="뒤로">←</button>
+      <h1>꾸미기</h1>
+      <div class="chip coin">🪙 <span id="shop-coins">0</span></div>
+    </header>
+    <div class="pet-stage card compact">
+      <div class="pet-slot" id="shop-pet"></div>
+    </div>
+    <div class="hint center">아이템을 사면 바로 입혀져요. "벗기"를 누르면 벗어요.</div>
+    <div class="segment" id="shop-tabs">
+      <button data-cat="hat">🎩 모자</button>
+      <button data-cat="outfit">👕 옷</button>
+      <button data-cat="acc">👓 악세사리</button>
+      <button data-cat="furniture">🛋️ 가구</button>
+    </div>
+    <div class="item-grid" id="shop-grid"></div>
   </section>
 
   <!-- ===== 성장 앨범 ===== -->

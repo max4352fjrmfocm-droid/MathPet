@@ -7,7 +7,8 @@
 ## 결정 사항
 - 프레임워크 없음, 빌드 없음. `index.html` + `css/style.css` + `js/app.js` 3개 파일이 전부.
 - 저장은 localStorage(`mathpet_save_v1`). 서버/로그인 없음.
-- 캐릭터 이미지는 사용자가 나중에 PNG로 제공. `assets/pet_*.png` 이름 규칙 (assets/README.md 참고). 없으면 이모지로 대체.
+- 캐릭터는 **피그미 다람쥐**(2026-11-21 확정). 사용자가 그린 4포즈 시트(idle/eat/happy/sleep)를 잘라 `assets/pet_<pose>.png`로 사용. 성장 단계(acorn/baby/child/teen)는 Canva AI로 생성. `pet_legend.png`는 Canva 크레딧 소진으로 미생성 → CSS 금빛 광채로 대체. 이름 규칙은 assets/README.md.
+- 꾸미기 상점(`screen-shop`): 모자/옷/악세사리/가구. 아이템은 이모지 오버레이(`ITEMS`의 pos/r로 위치·크기). `S.items.owned`, `S.items.equip`. 가구는 홈·펫·상점 카드 배경에 표시.
 - UI 언어는 한국어. 글자 크게, 버튼 크게(최소 56px), 세로 폰 기준(최대 480px).
 - 아이가 쓰므로 펫은 죽지 않음, 벌점 없음, 틀리면 정답만 보여주고 넘어감.
 

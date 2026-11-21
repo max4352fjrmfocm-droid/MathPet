@@ -19,18 +19,23 @@ function New-Icon([int]$size, [string]$path) {
   $m = $size * 0.12
   $g.FillEllipse($cBrush, $m, $m, $size - 2 * $m, $size - 2 * $m)
 
-  # egg: white ellipse, slightly narrower than tall
-  $eggW = $size * 0.42; $eggH = $size * 0.54
-  $ex = ($size - $eggW) / 2; $ey = $size * 0.16
-  $shadow = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(60, 120, 80, 0))
-  $g.FillEllipse($shadow, $ex + $size * 0.02, $ey + $size * 0.03, $eggW, $eggH)
-  $egg = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(255, 255, 250, 235))
-  $g.FillEllipse($egg, $ex, $ey, $eggW, $eggH)
-  # spots
-  $spot = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(255, 255, 209, 102))
-  $g.FillEllipse($spot, $ex + $eggW * 0.25, $ey + $eggH * 0.30, $eggW * 0.16, $eggW * 0.16)
-  $g.FillEllipse($spot, $ex + $eggW * 0.58, $ey + $eggH * 0.48, $eggW * 0.20, $eggW * 0.20)
-  $g.FillEllipse($spot, $ex + $eggW * 0.35, $ey + $eggH * 0.66, $eggW * 0.13, $eggW * 0.13)
+  $petPath = Join-Path $root "assets\pet_idle.png"
+  if (Test-Path $petPath) {
+    # character sprite, centered, leaving room for the math marks below
+    $pet = [System.Drawing.Bitmap]::FromFile($petPath)
+    $ph = $size * 0.66; $pw = $ph * $pet.Width / $pet.Height
+    $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+    $g.DrawImage($pet, [float](($size - $pw) / 2), [float]($size * 0.10), [float]$pw, [float]$ph)
+    $pet.Dispose()
+  } else {
+    # fallback egg: white ellipse, slightly narrower than tall
+    $eggW = $size * 0.42; $eggH = $size * 0.54
+    $ex = ($size - $eggW) / 2; $ey = $size * 0.16
+    $shadow = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(60, 120, 80, 0))
+    $g.FillEllipse($shadow, $ex + $size * 0.02, $ey + $size * 0.03, $eggW, $eggH)
+    $egg = New-Object System.Drawing.SolidBrush ([System.Drawing.Color]::FromArgb(255, 255, 250, 235))
+    $g.FillEllipse($egg, $ex, $ey, $eggW, $eggH)
+  }
 
   # "+ - x" math marks at the bottom
   $fontSize = [float]($size * 0.13)

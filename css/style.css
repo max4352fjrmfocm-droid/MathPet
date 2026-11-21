@@ -157,20 +157,53 @@ input[type="text"]:focus { border-color: var(--primary); }
   border-bottom: none;
 }
 .pet-slot {
-  display: flex; justify-content: center; align-items: center;
-  height: 150px;
+  --base: 150px;
+  display: flex; justify-content: center; align-items: flex-end;
+  height: 170px;
+  position: relative; z-index: 1;
 }
-.pet-slot.small { height: 70px; }
+.pet-slot.small { --base: 64px; height: 70px; align-items: center; }
 .pet-wrap {
   position: relative;
   display: inline-block;
   animation: bounce 2.2s ease-in-out infinite;
 }
-.pet-wrap.sad { animation: sway 3s ease-in-out infinite; filter: saturate(0.75); }
-.pet-wrap img { height: calc(140px * var(--grow, 1)); width: auto; display: block; transition: height 0.5s; }
-.pet-slot.small .pet-wrap img { height: 64px; }
-.pet-emoji { font-size: calc(110px * var(--grow, 1)); line-height: 1; display: block; transition: font-size 0.5s; }
+.pet-wrap.sad { animation: sway 3s ease-in-out infinite; filter: saturate(0.8); }
+.pet-wrap.pose-eat { animation: nibble 0.5s ease-in-out infinite; }
+.pet-wrap.pose-happy { animation: hop 0.5s ease-in-out infinite; }
+.pet-wrap.pose-sleep { animation: breathe 3s ease-in-out infinite; }
+.pet-wrap img { height: calc(var(--base) * var(--grow, 1)); width: auto; display: block; transition: height 0.5s; }
+.pet-slot.small .pet-wrap img { height: var(--base); }
+.pet-wrap img.legend-glow { filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 22px #ffb703); }
+.pet-emoji { font-size: calc(var(--base) * 0.75 * var(--grow, 1)); line-height: 1; display: block; transition: font-size 0.5s; }
 .pet-slot.small .pet-emoji { font-size: 52px; }
+@keyframes nibble { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg) translateY(-2px); } }
+@keyframes hop { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+
+/* 착용 아이템 */
+.wear {
+  position: absolute;
+  font-size: calc(var(--base) * var(--grow, 1) * var(--r, 0.3));
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.18));
+}
+.pet-slot.small .wear { font-size: calc(var(--base) * var(--r, 0.3)); }
+/* 가구 (펫 카드 배경) */
+.pet-stage { overflow: hidden; }
+.furn-layer { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.furn {
+  position: absolute;
+  font-size: calc(150px * var(--r, 0.4));
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  opacity: 0.95;
+}
+.pet-stage > *:not(.furn-layer) { position: relative; z-index: 1; }
+.pet-stage.compact { padding: 16px 16px 24px; min-height: 230px; display: flex; align-items: flex-end; justify-content: center; }
+.pet-stage.compact .pet-slot { width: 100%; }
 .mood-badge {
   position: absolute;
   right: -14px; top: -6px;
@@ -433,6 +466,37 @@ input[type="text"]:focus { border-color: var(--primary); }
 .food-btn.shop .f-count { color: #a36b00; }
 .food-btn:disabled { opacity: 0.4; }
 
+/* ===== 꾸미기 상점 ===== */
+#shop-tabs button { font-size: 14px; padding: 10px 2px; white-space: nowrap; }
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.item-card {
+  background: var(--card);
+  border-radius: 18px;
+  padding: 12px 8px 10px;
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  border: 3px solid transparent;
+}
+.item-card.equipped { border-color: var(--primary); background: #fff8e1; }
+.item-card .i-emoji { font-size: 40px; line-height: 1.1; }
+.item-card .i-name { font-weight: 800; font-size: 15px; }
+.item-btn {
+  margin-top: 4px;
+  width: 100%;
+  padding: 8px 4px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 15px;
+}
+.item-btn.buy { background: #fff3c4; color: #a36b00; }
+.item-btn.buy:disabled { opacity: 0.45; }
+.item-btn.on { background: var(--green); color: #fff; }
+.item-btn.off { background: #f1ecdf; color: var(--muted); }
+
 /* ===== 구구단 ===== */
 .dan-grid {
   display: grid;
@@ -604,7 +668,8 @@ input[type="text"]:focus { border-color: var(--primary); }
 .modal-title { font-size: 24px; font-weight: 900; margin-bottom: 10px; }
 .modal-body { font-size: 18px; line-height: 1.5; margin-bottom: 18px; }
 .modal-body .big-emoji { font-size: 80px; display: block; margin: 6px 0; }
-.modal-body .big-emoji img.evo { height: 120px; width: auto; }
+.modal-body .big-emoji img.evo { height: 140px; width: auto; }
+.album-card .a-img img.legend-glow { filter: drop-shadow(0 0 6px #ffd700); }
 .modal-buttons { display: flex; flex-direction: column; gap: 10px; }
 
 .toast {

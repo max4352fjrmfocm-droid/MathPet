@@ -1,20 +1,27 @@
-# 이미지 넣는 방법
+# 캐릭터 이미지 (피그미 다람쥐)
 
-이 폴더에 아래 이름으로 PNG 파일을 넣으면, 게임이 자동으로 이모지 대신 그 이미지를 사용합니다.
-파일이 없으면 이모지(🥚 🐣 🐥 🦖 🐲 🐉)가 대신 표시됩니다.
+게임은 아래 이름 규칙으로 이미지를 찾습니다. 있으면 쓰고, 없으면 다음 후보로 넘어가며, 끝내 없으면 이모지를 씁니다.
 
-| 파일 이름 | 성장 단계 | 필요 XP |
-|-----------|-----------|---------|
-| pet_egg.png    | 알      | 0    |
-| pet_baby.png   | 아기    | 100  |
-| pet_child.png  | 어린이  | 300  |
-| pet_teen.png   | 청소년  | 700  |
-| pet_adult.png  | 어른    | 1300 |
-| pet_legend.png | 전설    | 2200 |
+| 우선순위 | 파일 이름 | 용도 |
+|---|---|---|
+| 1 | `pet_<단계>_<포즈>.png` | 특정 단계의 특정 포즈 (예: `pet_baby_eat.png`) |
+| 2 | `pet_<포즈>.png` | 공통 포즈. 어른·전설 단계의 기본 모습 (`pet_idle.png`, `pet_eat.png`, `pet_happy.png`, `pet_sleep.png`) |
+| 3 | `pet_<단계>.png` | 단계별 기본 모습 (`pet_acorn.png`, `pet_baby.png`, `pet_child.png`, `pet_teen.png`, `pet_legend.png`) |
 
-권장 규격
-- 배경이 투명한 PNG
-- 정사각형 비율, 512×512 px 정도 (게임 화면에서는 140px 높이로 표시됨)
-- 캐릭터가 아래쪽 중앙에 서 있는 구도
+단계: `acorn`(도토리, 0 XP) → `baby`(100) → `child`(300) → `teen`(700) → `adult`(1300) → `legend`(2200)
+포즈: `idle` 기본 / `eat` 간식 먹을 때 / `happy` 정답·놀기·칭찬 / `sleep` 상태가 나쁠 때
 
-단계 이름, XP 기준, 파일 경로는 `js/app.js` 맨 위의 `STAGES`, `PET_IMAGES`에서 바꿀 수 있습니다.
+## 현재 들어 있는 파일
+- `pet_idle/eat/happy/sleep.png`: 사용자가 그린 포즈 시트에서 잘라낸 것 (`tools/split-sheet.ps1`)
+- `pet_acorn/baby/child/teen.png`: 위 캐릭터를 참고해 Canva AI로 생성 (`_raw/`에 원본)
+- `pet_legend.png`: 아직 없음 → 어른 모습에 금빛 광채 효과로 대체 중
+
+## 권장 규격
+- 배경 투명 PNG, 정사각형, 512×512 정도
+- 캐릭터가 아래쪽 중앙에 서 있는 구도 (모자·안경 위치가 이 구도 기준으로 맞춰져 있음)
+
+## 도구
+- `tools/split-sheet.ps1`: 흰 배경 포즈 시트를 잘라 투명 PNG로 (`-Names idle,eat,happy,sleep`)
+- `tools/clean-sprite.ps1`: 잘린 조각 지우기 (`-Erase "x,y,w,h"`)
+- `tools/resize-png.ps1`: 512px로 축소
+- `tools/make-icons.ps1`: `pet_idle.png`로 앱 아이콘 생성

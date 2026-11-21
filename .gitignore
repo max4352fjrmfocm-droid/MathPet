@@ -1,6 +1,9 @@
 # Claude Code local skill copies (not part of the app)
 .claude/skills/
 
+# raw source images (large; keep local only)
+assets/_raw/
+
 # OS / editor junk
 Thumbs.db
 .DS_Store
