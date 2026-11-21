@@ -4,7 +4,7 @@
     {
       "name": "mathpet",
       "runtimeExecutable": "powershell",
-      "runtimeArgs": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "C:\\Users\\max43\\MathPet\\tools\\serve.ps1", "-Port", "5173", "-Root", "C:\\Users\\max43\\MathPet"],
+      "runtimeArgs": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "tools/serve.ps1", "-Port", "5173"],
       "port": 5173
     }
   ]
