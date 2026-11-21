@@ -11,14 +11,17 @@
 - UI 언어는 한국어. 글자 크게, 버튼 크게(최소 56px), 세로 폰 기준(최대 480px).
 - 아이가 쓰므로 펫은 죽지 않음, 벌점 없음, 틀리면 정답만 보여주고 넘어감.
 
-## 작업 폴더 / 두 PC에서 작업
-- 프로젝트는 Google Drive 데스크톱 동기화 폴더 `내 드라이브\MathPet` 안에 있음 (집 PC에서는 H: 드라이브).
-- 집/회사 어느 쪽이든 Claude Code에서 이 폴더를 열면 됨. 한 번에 한 PC에서만 편집하고, 옮기기 전에 Drive 동기화 완료를 확인할 것.
+## 작업 폴더 / 두 PC에서 작업 (2026-11-21 GitHub으로 전환)
+- 원본은 GitHub 저장소 `max4352fjrmfocm-droid/MathPet` (public). 집 PC 로컬 폴더: `C:\Users\max43\MathPet`.
+- 회사 PC에서는 Git + GitHub CLI 설치 후 `gh auth login`, `gh repo clone max4352fjrmfocm-droid/MathPet` 하고 그 폴더를 Claude Code로 열면 됨.
+- 작업 끝나면 반드시 commit + push. 다른 PC에서 시작할 때 먼저 `git pull`.
+- 예전 Google Drive 폴더(`H:\내 드라이브\MathPet`)는 백업 사본일 뿐, 더 이상 편집하지 않음.
 - 대화 기록은 PC별로 따로 남으므로, 결정 사항은 이 파일(CLAUDE.md)에 계속 적을 것.
 
 ## 미리보기
-- 이 PC에는 Node/Python/Git이 없음. `tools/serve.ps1`(PowerShell HttpListener)로 정적 서빙.
+- 집 PC에는 Node/Python 없음(Git, gh는 있음). `tools/serve.ps1`(PowerShell HttpListener)로 정적 서빙.
 - Claude Code 우측 브라우저: `.claude/launch.json`의 `mathpet` 설정으로 `preview_start`, 모바일 뷰포트로 확인.
+- 실제 배포본 확인: https://max4352fjrmfocm-droid.github.io/MathPet/
 
 ## 구현된 기능 (v0.2, 2026-11-21)
 - 퀴즈 10문제/세션, 정답 🪙10(+3연속 5), 세션 별점에 따라 간식 보상.
@@ -29,9 +32,10 @@
 
 ## 배포 / 설치 (2026-11-21)
 - PWA 구성: `manifest.webmanifest`, `sw.js`(네트워크 우선·캐시 폴백, 캐시명 `mathpet-v2`, 파일 목록 바뀌면 버전 올릴 것), `icons/` (임시 아이콘, `tools/make-icons.ps1`로 생성).
-- 설치 경로: 정적 호스팅(Netlify Drop 권장)에 폴더 업로드 → `tools/qr.html`로 QR 생성 → 폰에서 홈 화면에 추가. 자녀 폰은 아이폰일 가능성 높음 → 앱스토어/TestFlight 없이 PWA가 유일한 무료 경로.
+- 호스팅: GitHub Pages (main 브랜치 루트). 주소 https://max4352fjrmfocm-droid.github.io/MathPet/ . push 후 1~2분이면 반영.
+- 설치: `tools/qr.html`(기본값에 위 주소 들어 있음) 또는 `tools/install-qr.png`를 폰 카메라로 → 홈 화면에 추가. 자녀 폰은 아이폰일 가능성 높음 → 앱스토어/TestFlight 없이 PWA가 유일한 무료 경로.
+- 업데이트(패치): 수정 후 commit + push만 하면 폰에서 다음 실행 때 자동 반영. 재설치 불필요, 저장 데이터 유지.
 - 설정 화면에 설치 안내 카드 + 안드로이드용 `beforeinstallprompt` 설치 버튼.
-- 아직 실제 호스팅 주소는 없음(사용자 계정 필요).
 
 ## 다음에 할 만한 것
 - 사용자 제공 캐릭터 이미지 적용

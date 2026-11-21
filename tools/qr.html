@@ -28,7 +28,7 @@
     <h1>📲 수학 펫 설치 QR 만들기</h1>
     <p class="hint">게임을 올린 인터넷 주소(https://...)를 넣고 "QR 만들기"를 누르세요. 그 QR을 아이 폰 카메라로 비추면 바로 열립니다.</p>
     <label for="url">게임 주소</label>
-    <input id="url" type="url" placeholder="https://예시.netlify.app" value="">
+    <input id="url" type="url" placeholder="https://..." value="https://max4352fjrmfocm-droid.github.io/MathPet/">
     <button id="make">QR 만들기</button>
     <button id="print" class="secondary">🖨️ 인쇄</button>
     <button id="dl" class="secondary">⬇️ PNG 저장</button>
@@ -75,8 +75,9 @@
   };
   try {
     const saved = localStorage.getItem('mathpet_qr_url');
-    if (saved) { $('#url').value = saved; make(); }
+    if (saved) $('#url').value = saved;
   } catch (e) {}
+  if ($('#url').value) make();
 })();
 </script>
 </body>

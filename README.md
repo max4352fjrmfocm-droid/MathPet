@@ -38,11 +38,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/serve.ps1 -Port 5173
 
 이 게임은 PWA(홈 화면에 추가되는 웹앱)라서 인터넷 주소에 올리기만 하면 폰에 설치됩니다.
 
-1. **인터넷에 올리기** (무료 정적 호스팅 중 하나)
-   - Netlify Drop: https://app.netlify.com/drop 에 로그인 후 이 `MathPet` 폴더를 통째로 드래그 → 주소 발급 (`https://xxxx.netlify.app`)
-   - Cloudflare Pages / GitHub Pages / Vercel 도 가능. 폴더를 그대로 올리면 됨 (빌드 없음).
-   - 반드시 **https** 주소여야 홈 화면 설치와 오프라인 동작이 됩니다.
-2. **QR 만들기**: `tools/qr.html` 을 열고 주소를 넣으면 QR이 나옵니다. 인쇄하거나 PNG로 저장.
+1. **인터넷 주소**: GitHub Pages로 올라가 있습니다 → https://max4352fjrmfocm-droid.github.io/MathPet/
+   (저장소: https://github.com/max4352fjrmfocm-droid/MathPet , main 브랜치에 push하면 1~2분 뒤 반영)
+2. **QR**: `tools/install-qr.png` 를 인쇄하거나, `tools/qr.html` 을 열면 같은 QR이 바로 나옵니다.
 3. **아이 폰에서**: 카메라로 QR을 비춰 열고
    - 아이폰(Safari): 공유 버튼 → **홈 화면에 추가**
    - 안드로이드(Chrome): ⋮ 메뉴 → **홈 화면에 추가 / 앱 설치** (설정 화면의 "앱으로 설치" 버튼으로도 가능)
