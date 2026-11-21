@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>수학 펫 설치 QR 만들기</title>
+<style>
+  body { font-family: "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif; background: #fff7e0; color: #3b3344; margin: 0; padding: 24px; }
+  .wrap { max-width: 520px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 12px; }
+  label { font-weight: 700; display: block; margin: 14px 0 6px; }
+  input { width: 100%; font-size: 17px; padding: 12px; border-radius: 12px; border: 2px solid #eadfc6; box-sizing: border-box; }
+  button { font-size: 17px; font-weight: 800; padding: 12px 18px; border-radius: 12px; border: none; background: #ffb703; color: #4a3300; cursor: pointer; margin-top: 12px; }
+  button.secondary { background: #fff; border: 2px solid #eadfc6; margin-left: 8px; }
+  .card { background: #fff; border-radius: 20px; padding: 24px; margin-top: 18px; text-align: center; box-shadow: 0 6px 18px rgba(80,60,20,.1); }
+  .card h2 { margin: 0 0 6px; font-size: 24px; }
+  .card .url { word-break: break-all; color: #8a8296; font-size: 14px; margin-top: 10px; }
+  #qr { display: inline-block; padding: 16px; background: #fff; }
+  #qr img, #qr canvas { display: block; }
+  .steps { text-align: left; margin: 16px auto 0; max-width: 360px; font-size: 15px; line-height: 1.6; }
+  .hint { color: #8a8296; font-size: 14px; margin-top: 10px; }
+  @media print { body { background: #fff; padding: 0; } .no-print { display: none; } .card { box-shadow: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="no-print">
+    <h1>📲 수학 펫 설치 QR 만들기</h1>
+    <p class="hint">게임을 올린 인터넷 주소(https://...)를 넣고 "QR 만들기"를 누르세요. 그 QR을 아이 폰 카메라로 비추면 바로 열립니다.</p>
+    <label for="url">게임 주소</label>
+    <input id="url" type="url" placeholder="https://예시.netlify.app" value="">
+    <button id="make">QR 만들기</button>
+    <button id="print" class="secondary">🖨️ 인쇄</button>
+    <button id="dl" class="secondary">⬇️ PNG 저장</button>
+  </div>
+
+  <div class="card" id="card" style="display:none">
+    <h2>🥚 수학 펫 키우기</h2>
+    <div>카메라로 QR을 비추세요</div>
+    <div id="qr"></div>
+    <div class="url" id="urlText"></div>
+    <div class="steps">
+      <b>설치하기</b><br>
+      📱 아이폰: Safari에서 열림 → 아래 <b>공유</b> 버튼 → <b>홈 화면에 추가</b><br>
+      🤖 안드로이드: Chrome에서 열림 → <b>⋮</b> → <b>홈 화면에 추가 / 앱 설치</b>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  let qr = null;
+  function make() {
+    const url = $('#url').value.trim();
+    if (!/^https?:\/\//i.test(url)) { alert('https:// 로 시작하는 주소를 넣어 주세요'); return; }
+    $('#qr').innerHTML = '';
+    qr = new QRCode($('#qr'), { text: url, width: 260, height: 260, correctLevel: QRCode.CorrectLevel.M });
+    $('#urlText').textContent = url;
+    $('#card').style.display = 'block';
+    try { localStorage.setItem('mathpet_qr_url', url); } catch (e) {}
+  }
+  $('#make').onclick = make;
+  $('#url').addEventListener('keydown', e => { if (e.key === 'Enter') make(); });
+  $('#print').onclick = () => { if ($('#card').style.display === 'none') make(); window.print(); };
+  $('#dl').onclick = () => {
+    if ($('#card').style.display === 'none') make();
+    const canvas = $('#qr canvas');
+    const img = $('#qr img');
+    const src = canvas ? canvas.toDataURL('image/png') : (img && img.src);
+    if (!src) return;
+    const a = document.createElement('a');
+    a.href = src; a.download = 'mathpet-qr.png'; a.click();
+  };
+  try {
+    const saved = localStorage.getItem('mathpet_qr_url');
+    if (saved) { $('#url').value = saved; make(); }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

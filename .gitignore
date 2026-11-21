@@ -1,0 +1,7 @@
+# Claude Code local skill copies (not part of the app)
+.claude/skills/
+
+# OS / editor junk
+Thumbs.db
+.DS_Store
+*.log

@@ -1,0 +1,17 @@
+{
+  "name": "수학 펫 키우기",
+  "short_name": "수학펫",
+  "description": "초등 1학년 사칙연산·구구단 학습 + 펫 키우기",
+  "lang": "ko",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff7e0",
+  "theme_color": "#ffd166",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

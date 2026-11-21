@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#FFD166">
+<title>수학 펫 키우기</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="수학펫">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== 홈 ===== -->
+  <section class="screen active" id="screen-home">
+    <header class="topbar">
+      <div class="chip coin">🪙 <span id="home-coins">0</span></div>
+      <div class="chip streak">🔥 <span id="home-streak">0</span>일</div>
+      <button class="icon-btn" id="btn-settings" aria-label="설정">⚙️</button>
+    </header>
+
+    <div class="pet-stage card">
+      <div class="speech" id="home-speech">안녕! 같이 공부하자!</div>
+      <div class="pet-slot" id="home-pet"></div>
+      <div class="pet-name" id="home-pet-name">알콩</div>
+      <div class="pet-level">Lv.<span id="home-pet-level">1</span> · <span id="home-stage-name">알</span></div>
+      <div class="xp-bar"><div class="xp-fill" id="home-xp-fill"></div></div>
+      <div class="xp-text" id="home-xp-text"></div>
+    </div>
+
+    <div class="bars card">
+      <div class="bar"><span class="bar-label">🍎 배고픔</span><div class="track"><div class="fill hunger" data-bar="hunger"></div></div></div>
+      <div class="bar"><span class="bar-label">🎈 행복</span><div class="track"><div class="fill happy" data-bar="happy"></div></div></div>
+      <div class="bar"><span class="bar-label">🛁 청결</span><div class="track"><div class="fill clean" data-bar="clean"></div></div></div>
+    </div>
+
+    <nav class="home-actions">
+      <button class="big-btn primary xl" id="btn-study">📚 공부하기</button>
+      <div class="row">
+        <button class="big-btn" id="btn-pet">🐾 돌봐주기 <span class="badge hidden" id="pet-alert">!</span></button>
+        <button class="big-btn" id="btn-gugudan">✖️ 구구단표</button>
+      </div>
+      <div class="row">
+        <button class="big-btn sub" id="btn-attend">📅 출석 도장 <small><span id="attend-day">0</span>/7</small></button>
+        <button class="big-btn sub" id="btn-album">📔 성장 앨범</button>
+      </div>
+    </nav>
+  </section>
+
+  <!-- ===== 성장 앨범 ===== -->
+  <section class="screen" id="screen-album">
+    <header class="topbar">
+      <button class="icon-btn back" data-go="home" aria-label="뒤로">←</button>
+      <h1>성장 앨범</h1>
+    </header>
+    <div class="hint center" id="album-summary"></div>
+    <div class="album-list" id="album-list"></div>
+    <div class="card">
+      <div class="section-title">🌱 어떻게 자라나요?</div>
+      <ul class="howto">
+        <li>문제를 맞히면 <b>XP +5</b>, 간식을 주면 <b>XP +5~20</b></li>
+        <li>XP 50마다 <b>레벨 업</b> (🪙 보너스)</li>
+        <li>단계가 바뀌면 <b>진화</b>! (🪙 50 보너스)</li>
+        <li>같은 단계에서도 XP가 쌓이면 펫이 조금씩 커져요</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== 공부 선택 ===== -->
+  <section class="screen" id="screen-study">
+    <header class="topbar">
+      <button class="icon-btn back" data-go="home" aria-label="뒤로">←</button>
+      <h1>무엇을 공부할까?</h1>
+    </header>
+
+    <div class="card">
+      <div class="section-title">단계</div>
+      <div class="segment" id="level-segment">
+        <button data-level="1">1단계</button>
+        <button data-level="2">2단계</button>
+        <button data-level="3">3단계</button>
+      </div>
+      <div class="hint" id="level-desc"></div>
+    </div>
+
+    <div class="topic-grid">
+      <button class="topic-card add" data-topic="add"><span class="t-emoji">➕</span><span class="t-name">덧셈</span></button>
+      <button class="topic-card sub" data-topic="sub"><span class="t-emoji">➖</span><span class="t-name">뺄셈</span></button>
+      <button class="topic-card mul" data-topic="mul"><span class="t-emoji">✖️</span><span class="t-name">곱셈</span></button>
+      <button class="topic-card div" data-topic="div"><span class="t-emoji">➗</span><span class="t-name">나눗셈</span></button>
+      <button class="topic-card mix wide" data-topic="mix"><span class="t-emoji">🎲</span><span class="t-name">섞어서 풀기</span></button>
+    </div>
+    <div class="hint center">한 번에 10문제 · 정답마다 🪙 10개</div>
+  </section>
+
+  <!-- ===== 퀴즈 ===== -->
+  <section class="screen" id="screen-quiz">
+    <header class="topbar">
+      <button class="icon-btn back" id="btn-quiz-quit" aria-label="그만하기">✕</button>
+      <div class="progress"><div class="progress-fill" id="quiz-progress"></div></div>
+      <div class="chip small" id="quiz-count">1/10</div>
+    </header>
+
+    <div class="quiz-pet">
+      <div class="pet-slot small" id="quiz-pet"></div>
+      <div class="chip streak-chip hidden" id="quiz-streak">🔥 연속 <span>0</span></div>
+      <div class="chip retry-chip hidden" id="quiz-retry">🔁 다시 풀기</div>
+    </div>
+
+    <div class="problem card">
+      <div class="problem-text" id="problem-text">3 + 4</div>
+      <div class="answer-box" id="answer-box"><span class="answer-text" id="answer-text"></span><span class="caret"></span></div>
+    </div>
+
+    <div class="keypad" id="keypad">
+      <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button>
+      <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button>
+      <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button>
+      <button data-key="back" class="key-back">⌫</button><button data-key="0">0</button><button data-key="ok" class="key-ok">확인</button>
+    </div>
+
+    <div class="feedback" id="quiz-feedback"><div class="feedback-inner" id="quiz-feedback-text"></div></div>
+  </section>
+
+  <!-- ===== 결과 ===== -->
+  <section class="screen" id="screen-result">
+    <div class="result card">
+      <div class="result-title" id="result-title">잘했어요!</div>
+      <div class="stars" id="result-stars"><span>☆</span><span>☆</span><span>☆</span></div>
+      <div class="result-pet pet-slot" id="result-pet"></div>
+      <div class="result-line"><b id="result-correct">0</b> / 10 문제 정답</div>
+      <div class="result-line">🪙 <b id="result-coins">0</b> 코인 획득</div>
+      <div class="reward-box" id="result-reward"></div>
+    </div>
+    <div class="home-actions">
+      <button class="big-btn primary" id="btn-result-pet">🐾 펫에게 간식 주러 가기</button>
+      <div class="row">
+        <button class="big-btn" id="btn-result-retry">🔁 다시 풀기</button>
+        <button class="big-btn" data-go="home">🏠 홈</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 펫 돌보기 ===== -->
+  <section class="screen" id="screen-pet">
+    <header class="topbar">
+      <button class="icon-btn back" data-go="home" aria-label="뒤로">←</button>
+      <h1 id="pet-title">알콩 돌보기</h1>
+      <div class="chip coin">🪙 <span id="pet-coins">0</span></div>
+    </header>
+
+    <div class="pet-stage card">
+      <div class="speech" id="pet-speech">안녕!</div>
+      <div class="pet-slot" id="pet-pet"></div>
+      <div class="pet-level">Lv.<span id="pet-level">1</span> · <span id="pet-stage-name">알</span></div>
+      <div class="xp-bar"><div class="xp-fill" id="pet-xp-fill"></div></div>
+      <div class="xp-text" id="pet-xp-text"></div>
+    </div>
+
+    <div class="bars card">
+      <div class="bar"><span class="bar-label">🍎 배고픔</span><div class="track"><div class="fill hunger" data-bar="hunger"></div></div></div>
+      <div class="bar"><span class="bar-label">🎈 행복</span><div class="track"><div class="fill happy" data-bar="happy"></div></div></div>
+      <div class="bar"><span class="bar-label">🛁 청결</span><div class="track"><div class="fill clean" data-bar="clean"></div></div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">🍱 간식 주기 <span class="hint inline">문제를 풀면 간식을 받아요</span></div>
+      <div class="food-row" id="food-row"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">🎮 놀기 · 씻기</div>
+      <div class="row">
+        <button class="big-btn stack" id="btn-play"><span>🎈 놀아주기</span><small>🪙 5</small></button>
+        <button class="big-btn stack" id="btn-wash"><span>🛁 씻기기</span><small>🪙 5</small></button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">🛒 간식 상점</div>
+      <div class="food-row" id="shop-row"></div>
+    </div>
+  </section>
+
+  <!-- ===== 구구단표 ===== -->
+  <section class="screen" id="screen-gugudan">
+    <header class="topbar">
+      <button class="icon-btn back" data-go="home" aria-label="뒤로">←</button>
+      <h1>구구단표</h1>
+    </header>
+    <div class="dan-grid" id="dan-grid"></div>
+    <div class="card hidden" id="dan-panel">
+      <div class="section-title" id="dan-title">2단</div>
+      <ul class="dan-list" id="dan-list"></ul>
+      <div class="row">
+        <button class="big-btn" id="btn-dan-speak">🔊 읽어주기</button>
+        <button class="big-btn primary" id="btn-dan-practice">✏️ 연습하기</button>
+      </div>
+      <button class="big-btn" id="btn-dan-div">➗ 나눗셈으로 연습</button>
+    </div>
+  </section>
+
+  <!-- ===== 설정 ===== -->
+  <section class="screen" id="screen-settings">
+    <header class="topbar">
+      <button class="icon-btn back" data-go="home" aria-label="뒤로">←</button>
+      <h1>설정</h1>
+    </header>
+
+    <div class="card">
+      <div class="section-title">🐾 펫 이름</div>
+      <div class="row">
+        <input type="text" id="input-pet-name" maxlength="8" placeholder="펫 이름">
+        <button class="big-btn primary" id="btn-save-name">저장</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">🔊 소리</div>
+      <button class="big-btn" id="btn-sound">소리 켜짐</button>
+    </div>
+
+    <div class="card">
+      <div class="section-title">📊 부모님 확인용 학습 기록</div>
+      <table class="stats-table" id="stats-table"></table>
+      <div class="hint" id="stats-summary"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">📲 스마트폰에 설치하기</div>
+      <button class="big-btn primary hidden" id="btn-install">⬇️ 앱으로 설치</button>
+      <div class="install-guide">
+        <p><b>아이폰(Safari)</b>: 아래 <b>공유</b> 버튼(네모에 화살표) → <b>홈 화면에 추가</b></p>
+        <p><b>안드로이드(Chrome)</b>: 오른쪽 위 <b>⋮</b> → <b>홈 화면에 추가</b> 또는 <b>앱 설치</b></p>
+        <p class="hint">홈 화면 아이콘으로 열면 전체 화면 앱처럼 실행되고, 인터넷 없이도 돼요.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">🗑️ 데이터</div>
+      <button class="big-btn danger" id="btn-reset">처음부터 다시 시작</button>
+    </div>
+    <div class="hint center">수학 펫 키우기 v0.2</div>
+  </section>
+
+</div>
+
+<!-- 모달 -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-buttons" id="modal-buttons"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
