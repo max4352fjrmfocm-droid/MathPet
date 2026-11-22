@@ -275,6 +275,7 @@ function currentPose() { return reactPose || basePose(); }
 function react(pose, ms = 1500) {
   reactPose = pose;
   clearTimeout(reactTimer);
+  if (walking) stopWalking();
   $$('.pet-slot').forEach(s => { if (s.closest('.screen.active')) s.innerHTML = petHTML(); });
   reactTimer = setTimeout(() => { reactPose = null; $$('.pet-slot').forEach(s => { if (s.closest('.screen.active')) s.innerHTML = petHTML(); }); }, ms);
 }
@@ -298,15 +299,69 @@ function furnitureHTML() {
 function renderFurniture(screenEl) {
   const host = $('.pet-stage', screenEl);
   if (!host) return;
+  ensureScene(host);
   let layer = $('.furn-layer', host);
   if (!layer) { layer = document.createElement('div'); layer.className = 'furn-layer'; host.prepend(layer); }
   layer.innerHTML = furnitureHTML();
 }
 
+// 배경 무대(하늘·해·구름·언덕·꽃·나비). CSS로만 그림. 밤(19~6시)에는 body.night로 달·별 버전.
+function ensureScene(host) {
+  if ($('.scene', host)) return;
+  const sc = document.createElement('div');
+  sc.className = 'scene';
+  sc.innerHTML = `
+    <i class="stars"></i><i class="sun"></i>
+    <i class="cloud c1"></i><i class="cloud c2"></i><i class="cloud c3"></i>
+    <i class="hill h1"></i><i class="hill h2"></i><i class="ground"></i>
+    <b class="deco d1">🌷</b><b class="deco d2">🌼</b><b class="deco d3">🍄</b><b class="deco d4">🌱</b><b class="deco d5">🌸</b>
+    <b class="bfly">🦋</b>`;
+  host.prepend(sc);
+}
+function isNight() { const h = new Date().getHours(); return h >= 19 || h < 6; }
+
+// 기본 상태 움직임: 가끔 산책(좌우로 걷기), 깡충, 갸웃, 뒤돌기. 반응 포즈 중이거나 졸릴 땐 쉼.
+let walkX = 0, face = 1, walking = false, idleTimer = null, walkEndTimer = null;
+function applyWalk(dur) {
+  $$('.pet-stage .pet-slot').forEach(el => { el.style.setProperty('--wt', dur + 's'); el.style.setProperty('--wx', walkX + 'px'); });
+  $$('.pet-body').forEach(el => el.style.setProperty('--face', face));
+  $$('.pet-wrap').forEach(w => w.classList.toggle('walking', walking));
+}
+function stopWalking() { walking = false; clearTimeout(walkEndTimer); $$('.pet-wrap').forEach(w => w.classList.remove('walking')); }
+function idleAct() {
+  clearTimeout(idleTimer);
+  const slot = $('.screen.active .pet-stage .pet-slot');
+  let wait = 1800 + Math.random() * 2600;
+  if (slot && !reactPose && !document.hidden && !walking && basePose() === 'idle' && !$('#modal').classList.contains('show')) {
+    const r = Math.random();
+    if (r < 0.5) {
+      const body = $('.pet-body', slot);
+      const w = body ? body.offsetWidth : 120;
+      const range = Math.max(0, (slot.clientWidth - w) / 2 - 10);
+      // 지금 있는 쪽의 반대편으로 걸어감 (항상 눈에 띄게 이동)
+      const side = walkX > 0 ? -1 : (walkX < 0 ? 1 : (Math.random() < 0.5 ? -1 : 1));
+      const tx = Math.round(side * range * (0.35 + Math.random() * 0.65));
+      const dur = Math.max(0.5, Math.abs(tx - walkX) / 55);
+      face = tx < walkX ? -1 : 1;
+      walkX = tx; walking = true;
+      applyWalk(dur);
+      walkEndTimer = setTimeout(stopWalking, dur * 1000);
+      wait = dur * 1000 + 400 + Math.random() * 1500;
+    } else if (r < 0.68) {
+      react('happy', 700); wait = 1600 + Math.random() * 1500;
+    } else if (r < 0.86) {
+      $$('.screen.active .pet-wrap').forEach(w => { w.classList.add('wiggle'); setTimeout(() => w.classList.remove('wiggle'), 900); });
+    } else {
+      face = -face; applyWalk(0);
+    }
+  }
+  idleTimer = setTimeout(idleAct, wait);
+}
+
 function petHTML(pose = currentPose()) {
   const st = stage();
   const m = mood();
-  return `<div class="pet-wrap ${m} pose-${pose}" style="--grow:${growScale()}">${stageImg(st, '', pose)}${wearablesHTML()}<span class="mood-badge">${MOOD_EMOJI[m]}</span></div>`;
+  return `<div class="pet-shadow"></div><div class="pet-wrap ${m} pose-${pose}${walking ? ' walking' : ''}" style="--grow:${growScale()}"><div class="pet-body" style="--face:${face}">${stageImg(st, '', pose)}${wearablesHTML()}</div><span class="mood-badge">${MOOD_EMOJI[m]}</span></div>`;
 }
 function popPet(slot) {
   const w = slot.querySelector('.pet-wrap');
@@ -403,9 +458,12 @@ function go(name) {
   current = name;
   $$('.screen').forEach(s => s.classList.toggle('active', s.id === 'screen-' + name));
   render(name);
+  stopWalking();
+  walkX = 0; applyWalk(0);
   window.scrollTo(0, 0);
 }
 function render(name = current) {
+  document.body.classList.toggle('night', isNight());
   const map = {
     home: renderHome, study: renderStudy, quiz: renderQuiz,
     pet: renderPetScreen, gugudan: renderGugudan, settings: renderSettings, album: renderAlbum, shop: renderShop,
@@ -1093,6 +1151,7 @@ async function init() {
   });
 
   setInterval(() => { tickPet(); save(); if (current === 'home' || current === 'pet') render(); }, 60 * 1000);
+  idleTimer = setTimeout(idleAct, 2500);
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
       tickPet(); save();
