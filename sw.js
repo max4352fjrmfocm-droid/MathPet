@@ -1,6 +1,6 @@
 /* 오프라인 지원용 서비스 워커.
    전략: 네트워크 우선, 실패하면 캐시 (개발 중 최신 파일이 바로 반영되도록). */
-const CACHE = 'mathpet-v4';
+const CACHE = 'mathpet-v5';
 const FILES = [
   './',
   './index.html',
@@ -27,7 +27,7 @@ self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (url.origin !== location.origin) return;
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request, { cache: 'no-cache' })   // 브라우저 HTTP 캐시를 믿지 않고 서버에 재확인(ETag) → 패치가 바로 반영
       .then(res => {
         if (res.ok) {
           const copy = res.clone();
