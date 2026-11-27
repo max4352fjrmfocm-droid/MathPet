@@ -1,6 +1,6 @@
 /* 오프라인 지원용 서비스 워커.
    전략: 네트워크 우선, 실패하면 캐시 (개발 중 최신 파일이 바로 반영되도록). */
-const CACHE = 'mathpet-v7';
+const CACHE = 'mathpet-v8';
 const FILES = [
   './',
   './index.html',

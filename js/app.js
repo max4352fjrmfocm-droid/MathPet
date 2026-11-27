@@ -295,9 +295,9 @@ function tickPet() {
 const imgOk = {};   // path -> true/false
 let ready = false;
 // 프레임 동작(여러 장을 순서대로 넘김): walk=걷기, cheer=기쁨(만세). 있으면 조각 인형 대신 사용 → 잘림 없음.
-const FRAME_SETS = ['walk', 'cheer'];
+const FRAME_SETS = ['walk', 'cheer', 'idle', 'eat', 'sleep'];
 const MAX_FRAMES = 8;
-const FRAME_SPEED = { walk: 0.5, cheer: 0.6 };   // 한 바퀴(초)
+const FRAME_SPEED = { walk: 0.5, cheer: 0.6, idle: 1.6, eat: 0.7, sleep: 2.4 };   // 한 바퀴(초)
 function framesFor(stageKey, set) {
   const pick = prefix => { const out = []; for (let n = 1; n <= MAX_FRAMES; n++) { const p = `${prefix}_${n}.png`; if (imgOk[p]) out.push(p); else break; } return out; };
   let f = pick(`assets/pet_${stageKey}_${set}`);
@@ -464,8 +464,10 @@ function petHTML(pose = currentPose()) {
   let body, anim = '';
   const wf = walking ? framesFor(st.key, 'walk') : [];
   const cf = !wf.length && pose === 'happy' ? framesFor(st.key, 'cheer') : [];
+  const pf = !wf.length && !cf.length && pose !== 'happy' ? framesFor(st.key, pose) : [];   // idle/eat/sleep 프레임
   if (wf.length) { body = framesHTML(wf, 'walk', glow); anim = ' frames-anim'; }
   else if (cf.length) { body = framesHTML(cf, 'cheer', glow); anim = ' frames-anim'; }
+  else if (pf.length) { body = framesHTML(pf, pose, glow); anim = ' frames-anim'; }
   else body = puppetHTML(st, pose);
   return `<div class="pet-shadow"></div><div class="pet-wrap ${m} pose-${pose}${walking ? ' walking' : ''}${anim}" style="--grow:${growScale()}"><div class="pet-body" style="--face:${face}">${body}${wearablesHTML()}</div><span class="mood-badge">${MOOD_EMOJI[m]}</span></div>`;
 }

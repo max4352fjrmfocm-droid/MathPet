@@ -7,7 +7,7 @@
 | 1 | `pet_<단계>_<포즈>.png` | 특정 단계의 특정 포즈 (예: `pet_baby_eat.png`) |
 | 2 | `pet_<포즈>.png` | 공통 포즈. 어른·전설 단계의 기본 모습 (`pet_idle.png`, `pet_eat.png`, `pet_happy.png`, `pet_sleep.png`) |
 | 3 | `pet_<단계>.png` | 단계별 기본 모습 (`pet_acorn.png`, `pet_baby.png`, `pet_child.png`, `pet_teen.png`, `pet_legend.png`) |
-| 4 | `pet_<동작>_<번호>.png` | 동작 프레임(어른). `walk`(걷기), `cheer`(기쁨·만세). 번호 1부터 이어서, 최대 8장. 있으면 조각 인형 대신 프레임을 순서대로 넘겨서 잘림 없이 움직임 |
+| 4 | `pet_<동작>_<번호>.png` | 동작 프레임(어른). `walk`(걷기), `cheer`(기쁨·만세), `idle`(가만히: 숨쉬기·두리번), `eat`(간식 먹기), `sleep`(잠). 번호 1부터 이어서, 최대 8장. 제미나이용 프롬프트는 `tools/gemini-prompts.md`. 있으면 조각 인형 대신 프레임을 순서대로 넘겨서 잘림 없이 움직임 |
 | 5 | `pet_<단계>_<동작>_<번호>.png` | 단계별 동작 프레임 (예: `pet_baby_walk_1.png`) |
 
 단계: `acorn`(도토리, 0 XP) → `baby`(100) → `child`(300) → `teen`(700) → `adult`(1300) → `legend`(2200)
