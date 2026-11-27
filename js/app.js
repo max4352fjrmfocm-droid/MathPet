@@ -329,6 +329,7 @@ function probeImages() {
 // 단계+포즈에 맞는 이미지 경로 (없으면 null)
 function petImagePath(stageKey, pose) {
   const c = [`assets/pet_${stageKey}_${pose}.png`];
+  if (pose === 'idle') c.push(`assets/pet_${stageKey}.png`);   // 단계 기본 모습이 있으면 공통 포즈보다 우선 (전설 등)
   if (stageKey === 'adult' || stageKey === 'legend') c.push(`assets/pet_${pose}.png`);
   c.push(`assets/pet_${stageKey}.png`);
   if (stageKey === 'adult' || stageKey === 'legend') c.push('assets/pet_idle.png');

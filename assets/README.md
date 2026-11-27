@@ -16,8 +16,9 @@
 ## 현재 들어 있는 파일
 - `pet_idle/eat/happy/sleep.png`: 사용자가 그린 포즈 시트에서 잘라낸 것 (`tools/split-sheet.ps1`)
 - `pet_acorn/baby/child/teen.png`: 위 캐릭터를 참고해 Canva AI로 생성 (`_raw/`에 원본)
-- `pet_legend.png`: 아직 없음 → 어른 모습에 금빛 광채 효과로 대체 중
 - `pet_idle_1~4.png`, `pet_eat_1~4.png`, `pet_sleep_1~4.png`: 제미나이로 생성한 가만히·먹기·잠 4프레임 (`_raw/sheet_idle.png` 등)
+- `pet_teen_idle/eat/walk/sleep_1~4.png`: 청소년 단계 4동작 (제미나이). 만세는 아직 없어 `pet_teen.png` 조각 인형 사용
+- `pet_legend_idle_1~4.png`, `pet_legend.png`: 전설 단계 (왕관·망토·금빛 광채, 제미나이). 광채가 옆 프레임과 겹쳐 `fade-edges.ps1`로 가장자리를 흐리게 함
 - `pet_walk_1~4.png`, `pet_cheer_1~4.png`: Canva AI로 생성한 걷기·만세 4프레임(`_raw/sheet_walk.png`, `sheet_cheer.png`에서 `split-sheet.ps1` → `normalize-frames.ps1`)
 
 ## 권장 규격
@@ -29,4 +30,6 @@
 - `tools/clean-sprite.ps1`: 잘린 조각 지우기 (`-Erase "x,y,w,h"`)
 - `tools/resize-png.ps1`: 512px로 축소
 - `tools/normalize-frames.ps1`: 프레임들을 같은 크기 정사각형(아래 중앙 정렬)으로 맞춰 512px 저장 (프레임 크기가 다르면 캐릭터가 들쭉날쭉 커졌다 작아짐)
+- `tools/import-sheet.ps1`: 시트 한 장을 위 과정(변환→자르기→정리→크기 맞추기)으로 한 번에 처리 (`-Image 파일 -Name teen_walk`)
+- `tools/fade-edges.ps1`: 광채가 있는 프레임의 가장자리 알파를 타원형으로 흐리게 (잘린 직선 숨김)
 - `tools/make-icons.ps1`: `pet_idle.png`로 앱 아이콘 생성

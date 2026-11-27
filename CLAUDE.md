@@ -7,7 +7,7 @@
 ## 결정 사항
 - 프레임워크 없음, 빌드 없음. `index.html` + `css/style.css` + `js/app.js` 3개 파일이 전부.
 - 저장은 localStorage(`mathpet_save_v1`). 서버/로그인 없음.
-- 캐릭터는 **피그미 다람쥐**(2026-11-21 확정). 사용자가 그린 4포즈 시트(idle/eat/happy/sleep)를 잘라 `assets/pet_<pose>.png`로 사용. 성장 단계(acorn/baby/child/teen)는 Canva AI로 생성. `pet_legend.png`는 Canva 크레딧 소진으로 미생성 → CSS 금빛 광채로 대체. 이름 규칙은 assets/README.md.
+- 캐릭터는 **피그미 다람쥐**(2026-11-21 확정). 사용자가 그린 4포즈 시트(idle/eat/happy/sleep)를 잘라 `assets/pet_<pose>.png`로 사용. 성장 단계(acorn/baby/child/teen)는 Canva AI로 생성. `pet_legend.png`는 제미나이로 생성(2026-11-27, 왕관·망토·광채). 이름 규칙은 assets/README.md.
 - 꾸미기 상점(`screen-shop`): 모자/옷/악세사리/가구. 아이템은 이모지 오버레이(`ITEMS`의 pos/r로 위치·크기). `S.items.owned`, `S.items.equip`. 가구는 홈·펫·상점 카드 배경에 표시.
 - UI 언어는 한국어. 글자 크게, 버튼 크게(최소 56px), 세로 폰 기준(최대 480px).
 - 아이가 쓰므로 펫은 죽지 않음, 벌점 없음, 틀리면 정답만 보여주고 넘어감.
@@ -36,6 +36,7 @@
 - 꾸미기 아이템 61종(모자 11/옷 12/악세 15/가구 23), 가격 20~500. 코인 체계가 바뀌어 가격을 낮춤.
 - 팔다리 움직임: `PUPPETS`가 이미지를 clip-path 조각(머리/몸통/앞발/팔/발)으로 나눠 `puppetHTML()`로 겹쳐 그림. 걷기=발 번갈아, 기쁨=팔 흔들기, 먹기=고개 끄덕. 조각은 2~3% 겹치게(틈 방지). 새 이미지가 오면 PUPPETS에 사각형 추가.
 - 프레임 동작(2026-11-27): `assets/pet_walk_1~4.png`, `pet_cheer_1~4.png`(Canva 생성). `framesFor()`/`framesHTML()`이 있으면 걷기·기쁨에 조각 인형 대신 프레임 전환(CSS steps) → 잘림 없음. 조각 인형은 프레임이 없는 단계/포즈(기본·먹기, 아기~청소년)에만 사용. 걷기 시작/끝에 `rerenderPets()`.
+- 제미나이 프레임(2026-11-27): 어른 idle/eat/sleep, 청소년 idle/eat/walk/sleep, 전설 idle(+`pet_legend.png`). 시트는 `tools/import-sheet.ps1 -Image 파일 -Name teen_walk`로 한 번에 처리. 광채 있는 시트는 `fade-edges.ps1` 추가. 프롬프트는 `tools/gemini-prompts.md`. 아기·어린이 단계와 청소년 만세는 아직 없음(조각 인형/정지 이미지로 대체).
 
 ## 배포 / 설치 (2026-11-21)
 - PWA 구성: `manifest.webmanifest`, `sw.js`(네트워크 우선·캐시 폴백, 캐시명 `mathpet-v2`, 파일 목록 바뀌면 버전 올릴 것), `icons/` (임시 아이콘, `tools/make-icons.ps1`로 생성).
