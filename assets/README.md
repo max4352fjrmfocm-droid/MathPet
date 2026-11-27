@@ -17,7 +17,7 @@
 - `pet_idle/eat/happy/sleep.png`: 사용자가 그린 포즈 시트에서 잘라낸 것 (`tools/split-sheet.ps1`)
 - `pet_acorn/baby/child/teen.png`: 위 캐릭터를 참고해 Canva AI로 생성 (`_raw/`에 원본)
 - `pet_legend.png`: 아직 없음 → 어른 모습에 금빛 광채 효과로 대체 중
-- `pet_idle_1~4.png`: 제미나이로 생성한 가만히(숨쉬기·눈 깜빡임) 4프레임 (`_raw/sheet_idle.png`)
+- `pet_idle_1~4.png`, `pet_eat_1~4.png`, `pet_sleep_1~4.png`: 제미나이로 생성한 가만히·먹기·잠 4프레임 (`_raw/sheet_idle.png` 등)
 - `pet_walk_1~4.png`, `pet_cheer_1~4.png`: Canva AI로 생성한 걷기·만세 4프레임(`_raw/sheet_walk.png`, `sheet_cheer.png`에서 `split-sheet.ps1` → `normalize-frames.ps1`)
 
 ## 권장 규격
