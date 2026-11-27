@@ -294,16 +294,35 @@ function tickPet() {
 // 이미지 파일이 있으면 이미지, 없으면 이모지
 const imgOk = {};   // path -> true/false
 let ready = false;
+// 프레임 동작(여러 장을 순서대로 넘김): walk=걷기, cheer=기쁨(만세). 있으면 조각 인형 대신 사용 → 잘림 없음.
+const FRAME_SETS = ['walk', 'cheer'];
+const MAX_FRAMES = 8;
+const FRAME_SPEED = { walk: 0.5, cheer: 0.6 };   // 한 바퀴(초)
+function framesFor(stageKey, set) {
+  const pick = prefix => { const out = []; for (let n = 1; n <= MAX_FRAMES; n++) { const p = `${prefix}_${n}.png`; if (imgOk[p]) out.push(p); else break; } return out; };
+  let f = pick(`assets/pet_${stageKey}_${set}`);
+  if (!f.length && (stageKey === 'adult' || stageKey === 'legend')) f = pick(`assets/pet_${set}`);
+  return f;
+}
+function framesHTML(frames, set, glow) {
+  const n = frames.length, dur = FRAME_SPEED[set] || 0.5;
+  return `<div class="frames f${n}${glow}" style="--n:${n};--fd:${dur}s">${frames.map((src, i) => `<img class="frame" src="${src}" alt="" style="--i:${i}">`).join('')}</div>`;
+}
 function probeImages() {
   const paths = new Set();
   STAGES.forEach(s => { paths.add(`assets/pet_${s.key}.png`); POSES.forEach(p => paths.add(`assets/pet_${s.key}_${p}.png`)); });
   POSES.forEach(p => paths.add(`assets/pet_${p}.png`));
-  const all = [...paths].map(src => new Promise(res => {
+  // 동작 프레임: pet_<동작>_<번호>.png (어른), pet_<단계>_<동작>_<번호>.png (단계별). 번호 1부터, 최대 8장.
+  const probe = src => new Promise(res => {
     const im = new Image();
-    im.onload = () => { imgOk[src] = true; if (ready) render(); res(); };
-    im.onerror = () => { imgOk[src] = false; res(); };
+    im.onload = () => { imgOk[src] = true; if (ready) render(); res(true); };
+    im.onerror = () => { imgOk[src] = false; res(false); };
     im.src = src;
-  }));
+  });
+  const all = [...paths].map(probe);
+  // 프레임은 1번부터 차례로 확인하고 없으면 멈춤 (없는 파일 요청을 줄이기 위해)
+  const seq = async prefix => { for (let n = 1; n <= MAX_FRAMES; n++) { if (!(await probe(`${prefix}_${n}.png`))) break; } };
+  FRAME_SETS.forEach(set => { all.push(seq(`assets/pet_${set}`)); STAGES.forEach(s => all.push(seq(`assets/pet_${s.key}_${set}`))); });
   // 이미지 확인이 끝나거나 2초가 지나면 진행
   return Promise.race([Promise.all(all), new Promise(res => setTimeout(res, 2000))]);
 }
@@ -380,9 +399,9 @@ let walkX = 0, face = 1, walking = false, idleTimer = null, walkEndTimer = null;
 function applyWalk(dur) {
   $$('.pet-stage .pet-slot').forEach(el => { el.style.setProperty('--wt', dur + 's'); el.style.setProperty('--wx', walkX + 'px'); });
   $$('.pet-body').forEach(el => el.style.setProperty('--face', face));
-  $$('.pet-wrap').forEach(w => w.classList.toggle('walking', walking));
+  rerenderPets();   // 걷기 프레임/조각 인형 전환은 다시 그려야 반영됨 (위치는 .pet-slot에 있어 안 튐)
 }
-function stopWalking() { walking = false; clearTimeout(walkEndTimer); $$('.pet-wrap').forEach(w => w.classList.remove('walking')); }
+function stopWalking() { walking = false; clearTimeout(walkEndTimer); rerenderPets(); }
 function idleAct() {
   clearTimeout(idleTimer);
   const slot = $('.screen.active .pet-stage .pet-slot');
@@ -440,8 +459,17 @@ function puppetHTML(st, pose) {
 function petHTML(pose = currentPose()) {
   const st = stage();
   const m = mood();
-  return `<div class="pet-shadow"></div><div class="pet-wrap ${m} pose-${pose}${walking ? ' walking' : ''}" style="--grow:${growScale()}"><div class="pet-body" style="--face:${face}">${puppetHTML(st, pose)}${wearablesHTML()}</div><span class="mood-badge">${MOOD_EMOJI[m]}</span></div>`;
+  const glow = st.key === 'legend' && !imgOk['assets/pet_legend.png'] ? ' legend-glow' : '';
+  // 걷는 중이면 걷기 프레임, 기쁨 포즈면 만세 프레임, 없으면 조각 인형/정지 이미지
+  let body, anim = '';
+  const wf = walking ? framesFor(st.key, 'walk') : [];
+  const cf = !wf.length && pose === 'happy' ? framesFor(st.key, 'cheer') : [];
+  if (wf.length) { body = framesHTML(wf, 'walk', glow); anim = ' frames-anim'; }
+  else if (cf.length) { body = framesHTML(cf, 'cheer', glow); anim = ' frames-anim'; }
+  else body = puppetHTML(st, pose);
+  return `<div class="pet-shadow"></div><div class="pet-wrap ${m} pose-${pose}${walking ? ' walking' : ''}${anim}" style="--grow:${growScale()}"><div class="pet-body" style="--face:${face}">${body}${wearablesHTML()}</div><span class="mood-badge">${MOOD_EMOJI[m]}</span></div>`;
 }
+function rerenderPets() { $$('.pet-slot').forEach(s => { if (s.closest('.screen.active')) s.innerHTML = petHTML(); }); }
 function popPet(slot) {
   const w = slot.querySelector('.pet-wrap');
   if (!w) return;

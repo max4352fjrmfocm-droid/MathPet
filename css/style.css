@@ -854,3 +854,24 @@ body.night .pet-stage .pet-level, body.night .pet-stage .xp-text { color: #5b6a5
 .segment button.locked { opacity: 0.5; }
 .topic-card .t-coin { font-size: 14px; font-weight: 800; color: #8a6d00; background: rgba(255, 255, 255, 0.65); padding: 2px 9px; border-radius: 10px; }
 .result-line.unlock { color: var(--primary-dark); font-weight: 900; font-size: 17px; }
+
+/* ===== 프레임 동작 (걷기/만세: 여러 장을 순서대로 넘김, 잘림 없음) ===== */
+.frames { position: relative; display: inline-block; }
+.frames img.frame { position: absolute; left: 0; top: 0; visibility: hidden; animation: frameShow4 var(--fd, 0.5s) steps(1) infinite; animation-delay: calc(var(--i, 0) * var(--fd, 0.5s) / var(--n, 4)); }
+.frames img.frame:first-child { position: relative; }
+.frames.f2 img.frame { animation-name: frameShow2; }
+.frames.f3 img.frame { animation-name: frameShow3; }
+.frames.f5 img.frame { animation-name: frameShow5; }
+.frames.f6 img.frame { animation-name: frameShow6; }
+.frames.f8 img.frame { animation-name: frameShow8; }
+@keyframes frameShow2 { 0%, 49.99% { visibility: visible; } 50%, 100% { visibility: hidden; } }
+@keyframes frameShow3 { 0%, 33.32% { visibility: visible; } 33.33%, 100% { visibility: hidden; } }
+@keyframes frameShow4 { 0%, 24.99% { visibility: visible; } 25%, 100% { visibility: hidden; } }
+@keyframes frameShow5 { 0%, 19.99% { visibility: visible; } 20%, 100% { visibility: hidden; } }
+@keyframes frameShow6 { 0%, 16.66% { visibility: visible; } 16.67%, 100% { visibility: hidden; } }
+@keyframes frameShow8 { 0%, 12.49% { visibility: visible; } 12.5%, 100% { visibility: hidden; } }
+.frames.legend-glow { filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 22px #ffb703); }
+/* 프레임으로 걷는 동안은 몸 전체 기울임 대신 살짝 들썩이기만 */
+.pet-wrap.walking.frames-anim { animation: walkBob 0.25s ease-in-out infinite; }
+@keyframes walkBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+.pet-wrap.pose-happy.frames-anim { animation: hop 0.6s ease-in-out infinite; }
