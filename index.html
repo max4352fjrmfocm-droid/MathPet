@@ -117,7 +117,7 @@
       <button class="topic-card div" data-topic="div"><span class="t-emoji">➗</span><span class="t-name">나눗셈</span></button>
       <button class="topic-card mix wide" data-topic="mix"><span class="t-emoji">🎲</span><span class="t-name">섞어서 풀기</span></button>
     </div>
-    <div class="hint center">한 번에 10문제 · 정답마다 🪙 10개</div>
+    <div class="hint center" id="study-hint">한 번에 10문제</div>
   </section>
 
   <!-- ===== 퀴즈 ===== -->
@@ -157,6 +157,7 @@
       <div class="result-pet pet-slot" id="result-pet"></div>
       <div class="result-line"><b id="result-correct">0</b> / 10 문제 정답</div>
       <div class="result-line">🪙 <b id="result-coins">0</b> 코인 획득</div>
+      <div class="result-line unlock hidden" id="result-unlock"></div>
       <div class="reward-box" id="result-reward"></div>
     </div>
     <div class="home-actions">

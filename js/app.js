@@ -34,33 +34,74 @@ const POSES = ['idle', 'eat', 'happy', 'sleep'];
 // pos: 펫 이미지 기준 위치(%), r: 펫 높이 대비 크기
 const ITEM_CATS = { hat: '모자', outfit: '옷', acc: '악세사리', furniture: '가구' };
 const ITEMS = [
-  { id: 'ribbon',   cat: 'hat', name: '리본',      emoji: '🎀', price: 50,  pos: { x: 68, y: 6 },  r: 0.22 },
-  { id: 'cap',      cat: 'hat', name: '야구모자',  emoji: '🧢', price: 60,  pos: { x: 50, y: 2 },  r: 0.3 },
-  { id: 'tophat',   cat: 'hat', name: '신사 모자', emoji: '🎩', price: 120, pos: { x: 50, y: -2 }, r: 0.3 },
-  { id: 'gradcap',  cat: 'hat', name: '학사모',    emoji: '🎓', price: 150, pos: { x: 50, y: 0 },  r: 0.3 },
-  { id: 'crown',    cat: 'hat', name: '왕관',      emoji: '👑', price: 300, pos: { x: 50, y: -2 }, r: 0.28 },
+  // 모자 (pos: 펫 이미지 기준 %, r: 펫 크기 대비 비율)
+  { id: 'ribbon',   cat: 'hat', name: '리본',       emoji: '🎀', price: 30,  pos: { x: 68, y: 6 },  r: 0.22 },
+  { id: 'flower',   cat: 'hat', name: '꽃핀',       emoji: '🌸', price: 25,  pos: { x: 30, y: 8 },  r: 0.2 },
+  { id: 'cap',      cat: 'hat', name: '야구모자',   emoji: '🧢', price: 35,  pos: { x: 50, y: 2 },  r: 0.3 },
+  { id: 'strawhat', cat: 'hat', name: '밀짚모자',   emoji: '👒', price: 45,  pos: { x: 50, y: 0 },  r: 0.34 },
+  { id: 'berry',    cat: 'hat', name: '딸기 모자',  emoji: '🍓', price: 55,  pos: { x: 50, y: 2 },  r: 0.28 },
+  { id: 'tophat',   cat: 'hat', name: '신사 모자',  emoji: '🎩', price: 70,  pos: { x: 50, y: -2 }, r: 0.3 },
+  { id: 'helmet',   cat: 'hat', name: '안전모',     emoji: '⛑️', price: 70,  pos: { x: 50, y: 2 },  r: 0.3 },
+  { id: 'gradcap',  cat: 'hat', name: '학사모',     emoji: '🎓', price: 90,  pos: { x: 50, y: 0 },  r: 0.3 },
+  { id: 'pumpkin',  cat: 'hat', name: '호박 모자',  emoji: '🎃', price: 100, pos: { x: 50, y: 2 },  r: 0.3 },
+  { id: 'unicorn',  cat: 'hat', name: '유니콘 뿔',  emoji: '🦄', price: 160, pos: { x: 50, y: -4 }, r: 0.26 },
+  { id: 'crown',    cat: 'hat', name: '왕관',       emoji: '👑', price: 180, pos: { x: 50, y: -2 }, r: 0.28 },
 
-  { id: 'tshirt',   cat: 'outfit', name: '티셔츠', emoji: '👕', price: 70,  pos: { x: 50, y: 62 }, r: 0.3 },
-  { id: 'vest',     cat: 'outfit', name: '조끼',   emoji: '🦺', price: 80,  pos: { x: 50, y: 62 }, r: 0.3 },
-  { id: 'dress',    cat: 'outfit', name: '원피스', emoji: '👗', price: 90,  pos: { x: 50, y: 66 }, r: 0.32 },
-  { id: 'dobok',    cat: 'outfit', name: '도복',   emoji: '🥋', price: 130, pos: { x: 50, y: 62 }, r: 0.3 },
-  { id: 'coat',     cat: 'outfit', name: '코트',   emoji: '🧥', price: 150, pos: { x: 50, y: 62 }, r: 0.32 },
+  // 옷
+  { id: 'shorts',   cat: 'outfit', name: '반바지',     emoji: '🩳', price: 25,  pos: { x: 50, y: 78 }, r: 0.28 },
+  { id: 'tshirt',   cat: 'outfit', name: '티셔츠',     emoji: '👕', price: 40,  pos: { x: 50, y: 62 }, r: 0.3 },
+  { id: 'tank',     cat: 'outfit', name: '운동복',     emoji: '🎽', price: 40,  pos: { x: 50, y: 62 }, r: 0.3 },
+  { id: 'blouse',   cat: 'outfit', name: '블라우스',   emoji: '👚', price: 45,  pos: { x: 50, y: 62 }, r: 0.3 },
+  { id: 'vest',     cat: 'outfit', name: '조끼',       emoji: '🦺', price: 50,  pos: { x: 50, y: 62 }, r: 0.3 },
+  { id: 'dress',    cat: 'outfit', name: '원피스',     emoji: '👗', price: 55,  pos: { x: 50, y: 66 }, r: 0.32 },
+  { id: 'swim',     cat: 'outfit', name: '수영복',     emoji: '🩱', price: 55,  pos: { x: 50, y: 64 }, r: 0.3 },
+  { id: 'shirt',    cat: 'outfit', name: '넥타이 셔츠', emoji: '👔', price: 60,  pos: { x: 50, y: 62 }, r: 0.3 },
+  { id: 'dobok',    cat: 'outfit', name: '도복',       emoji: '🥋', price: 80,  pos: { x: 50, y: 62 }, r: 0.3 },
+  { id: 'coat',     cat: 'outfit', name: '코트',       emoji: '🧥', price: 90,  pos: { x: 50, y: 62 }, r: 0.32 },
+  { id: 'labcoat',  cat: 'outfit', name: '박사 가운',  emoji: '🥼', price: 100, pos: { x: 50, y: 62 }, r: 0.32 },
+  { id: 'hanbok',   cat: 'outfit', name: '전통 옷',    emoji: '👘', price: 120, pos: { x: 50, y: 64 }, r: 0.34 },
 
-  { id: 'balloon',  cat: 'acc', name: '풍선',     emoji: '🎈', price: 40,  pos: { x: 92, y: 10 }, r: 0.3 },
-  { id: 'glasses',  cat: 'acc', name: '안경',     emoji: '👓', price: 60,  pos: { x: 50, y: 33 }, r: 0.28 },
-  { id: 'scarf',    cat: 'acc', name: '목도리',   emoji: '🧣', price: 70,  pos: { x: 50, y: 52 }, r: 0.26 },
-  { id: 'sunglass', cat: 'acc', name: '선글라스', emoji: '🕶️', price: 90,  pos: { x: 50, y: 33 }, r: 0.28 },
-  { id: 'bag',      cat: 'acc', name: '가방',     emoji: '🎒', price: 110, pos: { x: 12, y: 60 }, r: 0.28 },
-  { id: 'medal',    cat: 'acc', name: '메달',     emoji: '🏅', price: 180, pos: { x: 50, y: 60 }, r: 0.22 },
+  // 악세사리
+  { id: 'candy',    cat: 'acc', name: '사탕',       emoji: '🍭', price: 20,  pos: { x: 84, y: 60 }, r: 0.22 },
+  { id: 'balloon',  cat: 'acc', name: '풍선',       emoji: '🎈', price: 25,  pos: { x: 92, y: 10 }, r: 0.3 },
+  { id: 'icecream', cat: 'acc', name: '아이스크림', emoji: '🍦', price: 30,  pos: { x: 84, y: 58 }, r: 0.22 },
+  { id: 'glasses',  cat: 'acc', name: '안경',       emoji: '👓', price: 35,  pos: { x: 50, y: 33 }, r: 0.28 },
+  { id: 'scarf',    cat: 'acc', name: '목도리',     emoji: '🧣', price: 40,  pos: { x: 50, y: 52 }, r: 0.26 },
+  { id: 'soccer',   cat: 'acc', name: '축구공',     emoji: '⚽', price: 45,  pos: { x: 14, y: 88 }, r: 0.22 },
+  { id: 'umbrella', cat: 'acc', name: '우산',       emoji: '🌂', price: 55,  pos: { x: 88, y: 40 }, r: 0.3 },
+  { id: 'sunglass', cat: 'acc', name: '선글라스',   emoji: '🕶️', price: 55,  pos: { x: 50, y: 33 }, r: 0.28 },
+  { id: 'bag',      cat: 'acc', name: '가방',       emoji: '🎒', price: 65,  pos: { x: 12, y: 60 }, r: 0.28 },
+  { id: 'watch',    cat: 'acc', name: '손목시계',   emoji: '⌚', price: 70,  pos: { x: 24, y: 66 }, r: 0.16 },
+  { id: 'necklace', cat: 'acc', name: '목걸이',     emoji: '📿', price: 80,  pos: { x: 50, y: 56 }, r: 0.22 },
+  { id: 'medal',    cat: 'acc', name: '메달',       emoji: '🏅', price: 110, pos: { x: 50, y: 60 }, r: 0.22 },
+  { id: 'guitar',   cat: 'acc', name: '기타',       emoji: '🎸', price: 120, pos: { x: 72, y: 66 }, r: 0.32 },
+  { id: 'wand',     cat: 'acc', name: '마법봉',     emoji: '🪄', price: 140, pos: { x: 86, y: 44 }, r: 0.26 },
+  { id: 'trophy',   cat: 'acc', name: '트로피',     emoji: '🏆', price: 220, pos: { x: 84, y: 76 }, r: 0.26 },
 
-  { id: 'plant',    cat: 'furniture', name: '화분',   emoji: '🪴', price: 60,  pos: { x: 8,  y: 92 }, r: 0.42 },
-  { id: 'teddy',    cat: 'furniture', name: '곰인형', emoji: '🧸', price: 80,  pos: { x: 90, y: 92 }, r: 0.36 },
-  { id: 'lamp',     cat: 'furniture', name: '램프',   emoji: '💡', price: 70,  pos: { x: 90, y: 22 }, r: 0.3 },
-  { id: 'frame',    cat: 'furniture', name: '액자',   emoji: '🖼️', price: 90,  pos: { x: 10, y: 22 }, r: 0.34 },
-  { id: 'bed',      cat: 'furniture', name: '침대',   emoji: '🛏️', price: 150, pos: { x: 20, y: 70 }, r: 0.5 },
-  { id: 'sofa',     cat: 'furniture', name: '소파',   emoji: '🛋️', price: 200, pos: { x: 82, y: 70 }, r: 0.5 },
-  { id: 'tree',     cat: 'furniture', name: '트리',   emoji: '🎄', price: 250, pos: { x: 88, y: 48 }, r: 0.6 },
-  { id: 'house',    cat: 'furniture', name: '나무집', emoji: '🏠', price: 400, pos: { x: 12, y: 48 }, r: 0.6 },
+  // 가구 (펫 카드 배경, pos: 카드 기준 %)
+  { id: 'log',       cat: 'furniture', name: '통나무',   emoji: '🪵', price: 25,  pos: { x: 86, y: 90 }, r: 0.34 },
+  { id: 'sunflower', cat: 'furniture', name: '해바라기', emoji: '🌻', price: 30,  pos: { x: 6,  y: 70 }, r: 0.32 },
+  { id: 'plant',     cat: 'furniture', name: '화분',     emoji: '🪴', price: 35,  pos: { x: 8,  y: 92 }, r: 0.42 },
+  { id: 'chair',     cat: 'furniture', name: '의자',     emoji: '🪑', price: 40,  pos: { x: 24, y: 88 }, r: 0.36 },
+  { id: 'lamp',      cat: 'furniture', name: '램프',     emoji: '💡', price: 40,  pos: { x: 90, y: 22 }, r: 0.3 },
+  { id: 'nest',      cat: 'furniture', name: '둥지',     emoji: '🪺', price: 45,  pos: { x: 78, y: 30 }, r: 0.32 },
+  { id: 'teddy',     cat: 'furniture', name: '곰인형',   emoji: '🧸', price: 50,  pos: { x: 90, y: 92 }, r: 0.36 },
+  { id: 'frame',     cat: 'furniture', name: '액자',     emoji: '🖼️', price: 55,  pos: { x: 10, y: 22 }, r: 0.34 },
+  { id: 'mirror',    cat: 'furniture', name: '거울',     emoji: '🪞', price: 60,  pos: { x: 22, y: 36 }, r: 0.36 },
+  { id: 'books',     cat: 'furniture', name: '책',       emoji: '📚', price: 70,  pos: { x: 76, y: 88 }, r: 0.34 },
+  { id: 'bed',       cat: 'furniture', name: '침대',     emoji: '🛏️', price: 90,  pos: { x: 20, y: 70 }, r: 0.5 },
+  { id: 'tv',        cat: 'furniture', name: '텔레비전', emoji: '📺', price: 110, pos: { x: 80, y: 52 }, r: 0.4 },
+  { id: 'sofa',      cat: 'furniture', name: '소파',     emoji: '🛋️', price: 120, pos: { x: 82, y: 70 }, r: 0.5 },
+  { id: 'computer',  cat: 'furniture', name: '컴퓨터',   emoji: '🖥️', price: 130, pos: { x: 18, y: 52 }, r: 0.4 },
+  { id: 'car',       cat: 'furniture', name: '자동차',   emoji: '🚗', price: 150, pos: { x: 84, y: 86 }, r: 0.46 },
+  { id: 'tree',      cat: 'furniture', name: '트리',     emoji: '🎄', price: 150, pos: { x: 88, y: 48 }, r: 0.6 },
+  { id: 'slide',     cat: 'furniture', name: '미끄럼틀', emoji: '🛝', price: 170, pos: { x: 14, y: 80 }, r: 0.5 },
+  { id: 'shroom',    cat: 'furniture', name: '버섯집',   emoji: '🍄', price: 180, pos: { x: 90, y: 68 }, r: 0.5 },
+  { id: 'carousel',  cat: 'furniture', name: '회전목마', emoji: '🎠', price: 220, pos: { x: 12, y: 46 }, r: 0.56 },
+  { id: 'house',     cat: 'furniture', name: '나무집',   emoji: '🏠', price: 250, pos: { x: 12, y: 48 }, r: 0.6 },
+  { id: 'fountain',  cat: 'furniture', name: '분수',     emoji: '⛲', price: 280, pos: { x: 86, y: 44 }, r: 0.56 },
+  { id: 'circus',    cat: 'furniture', name: '서커스',   emoji: '🎪', price: 320, pos: { x: 84, y: 40 }, r: 0.6 },
+  { id: 'castle',    cat: 'furniture', name: '성',       emoji: '🏰', price: 500, pos: { x: 14, y: 40 }, r: 0.64 },
 ];
 const ITEM_BY_ID = Object.fromEntries(ITEMS.map(i => [i.id, i]));
 
@@ -92,6 +133,12 @@ const LEVEL_DESC = {
   2: '덧셈·뺄셈 20까지 / 곱셈·나눗셈 6~9단',
   3: '덧셈·뺄셈 100까지 / 곱셈·나눗셈 2~9단 전체',
 };
+// 정답 1개당 코인: 연산 종류(덧<뺄<곱<나) × 단계(1<2<3). 섞어 풀기는 문제마다 자기 연산 기준.
+const COIN_TABLE = { add: [3, 5, 7], sub: [4, 6, 8], mul: [5, 7, 9], div: [6, 8, 10] };
+const coinFor = (topic, level) => COIN_TABLE[topic][level - 1];
+const streakBonus = level => 1 + level;                 // 3연속 이상 정답 보너스
+const starBonus = (stars, level) => stars * 5 * level;  // 세션 별점 보너스
+const REVIEW_RATE = 0.5;  // 오늘 이미 다 푼 단계를 또 풀면(복습) 코인 절반
 
 const DECAY_PER_HOUR = { hunger: 4, happy: 3, clean: 2 };
 const PLAY_COST = 5;
@@ -141,9 +188,17 @@ function defaultSave() {
       dan: {},
     },
     settings: { sound: true, level: 1 },
+    daily: { date: null, done: { 1: 0, 2: 0, 3: 0 } },  // 오늘 단계별 완료 횟수 (학습 사다리)
     tutorialSeen: false,
   };
 }
+// 하루 학습 사다리: 1단계를 오늘 한 번 다 풀면 2단계, 2단계를 다 풀면 3단계가 열림. 날짜가 바뀌면 1단계부터.
+function ensureDaily() {
+  const t = todayStr();
+  if (S.daily.date !== t) { S.daily = { date: t, done: { 1: 0, 2: 0, 3: 0 } }; S.settings.level = 1; save(); }
+}
+function levelUnlocked(l) { ensureDaily(); return l === 1 || S.daily.done[l - 1] > 0; }
+function levelDoneToday(l) { ensureDaily(); return S.daily.done[l] > 0; }
 function load() {
   S = defaultSave();
   try {
@@ -358,10 +413,34 @@ function idleAct() {
   idleTimer = setTimeout(idleAct, wait);
 }
 
+// 팔다리 움직임(종이 인형 방식): 한 장의 이미지를 clip-path로 머리/몸통/팔/발 조각으로 나눠 겹쳐 놓고
+// 조각마다 따로 애니메이션. 사각형은 [top, right, bottom, left] % inset. 조각끼리 겹치지 않게 나눔(잔상 방지).
+// 키: 어른 포즈 시트는 포즈 이름, 성장 단계 기본 이미지는 단계 이름. 없으면 통째로 표시.
+const PUPPETS = {
+  // 움직이는 조각과 가만히 있는 조각은 2~3% 겹치게 해서 움직일 때 틈이 안 보이게 함.
+  idle:  { head: [0, 0, 53, 0], t1: [45, 0, 42, 0], t2: [56, 62, 26, 0], paws: [56, 36, 28, 36], t3: [56, 0, 26, 62], t4: [70, 0, 11, 0], footL: [87, 50, 0, 0], footR: [87, 0, 0, 50] },
+  eat:   { head: [0, 0, 53, 0], t1: [45, 0, 48, 0], t2: [50, 68, 28, 0], paws: [50, 30, 30, 30], t3: [50, 0, 28, 68], t4: [68, 0, 11, 0], footL: [87, 50, 0, 0], footR: [87, 0, 0, 50] },
+  happy: { head: [0, 28, 48, 28], armL: [30, 68, 50, 0], armR: [30, 0, 50, 68], t1: [48, 0, 10, 0], footL: [88, 50, 0, 0], footR: [88, 0, 0, 50] },
+  baby:  { head: [0, 0, 43, 0], t1: [55, 0, 16, 0], footL: [82, 50, 0, 0], footR: [82, 0, 0, 50] },
+  child: { head: [0, 22, 50, 22], armL: [32, 74, 42, 0], t1: [48, 0, 10, 0], footL: [88, 50, 0, 0], footR: [88, 0, 0, 50] },
+  teen:  { head: [0, 20, 53, 20], armL: [36, 72, 45, 0], t1: [45, 0, 10, 0], footL: [88, 50, 0, 0], footR: [88, 0, 0, 50] },
+};
+function puppetHTML(st, pose) {
+  const src = petImagePath(st.key, pose);
+  if (!src) return stageImg(st, '', pose);
+  const isPoseSheet = src === `assets/pet_${pose}.png` || src === `assets/pet_${st.key}_${pose}.png`;
+  const parts = PUPPETS[isPoseSheet ? pose : st.key];
+  if (!parts) return stageImg(st, '', pose);
+  const glow = st.key === 'legend' && !imgOk['assets/pet_legend.png'] ? ' legend-glow' : '';
+  const imgs = Object.entries(parts).map(([name, [t, r, b, l]]) =>
+    `<img class="part p-${name}" src="${src}" alt="" style="clip-path:inset(${t}% ${r}% ${b}% ${l}%)">`).join('');
+  return `<div class="puppet${glow}"><img class="base" src="${src}" alt="${st.name}">${imgs}</div>`;
+}
+
 function petHTML(pose = currentPose()) {
   const st = stage();
   const m = mood();
-  return `<div class="pet-shadow"></div><div class="pet-wrap ${m} pose-${pose}${walking ? ' walking' : ''}" style="--grow:${growScale()}"><div class="pet-body" style="--face:${face}">${stageImg(st, '', pose)}${wearablesHTML()}</div><span class="mood-badge">${MOOD_EMOJI[m]}</span></div>`;
+  return `<div class="pet-shadow"></div><div class="pet-wrap ${m} pose-${pose}${walking ? ' walking' : ''}" style="--grow:${growScale()}"><div class="pet-body" style="--face:${face}">${puppetHTML(st, pose)}${wearablesHTML()}</div><span class="mood-badge">${MOOD_EMOJI[m]}</span></div>`;
 }
 function popPet(slot) {
   const w = slot.querySelector('.pet-wrap');
@@ -577,8 +656,26 @@ function renderAlbum() {
 
 /* ================= 공부 선택 ================= */
 function renderStudy() {
-  $$('#level-segment button').forEach(b => b.classList.toggle('active', +b.dataset.level === S.settings.level));
-  $('#level-desc').textContent = LEVEL_DESC[S.settings.level];
+  ensureDaily();
+  if (!levelUnlocked(S.settings.level)) S.settings.level = 1;
+  const lv = S.settings.level;
+  $$('#level-segment button').forEach(b => {
+    const l = +b.dataset.level;
+    b.classList.toggle('active', l === lv);
+    b.classList.toggle('locked', !levelUnlocked(l));
+    b.textContent = `${l}단계${levelDoneToday(l) ? ' ✅' : (!levelUnlocked(l) ? ' 🔒' : '')}`;
+  });
+  let desc = LEVEL_DESC[lv];
+  if (levelDoneToday(lv)) desc += `<br>오늘 이미 다 푼 단계예요. 또 풀면 복습(코인 절반)!${lv < 3 ? ` ${lv + 1}단계에 도전해 봐요.` : ''}`;
+  else if (lv < 3) desc += `<br>10문제를 다 풀면 ${lv + 1}단계가 열려요.`;
+  $('#level-desc').innerHTML = desc;
+  $$('.topic-card').forEach(b => {
+    const t = b.dataset.topic;
+    let tag = $('.t-coin', b);
+    if (!tag) { tag = document.createElement('span'); tag.className = 't-coin'; b.appendChild(tag); }
+    tag.textContent = t === 'mix' ? `🪙 ${coinFor('add', lv)}~${coinFor('div', lv)}` : `🪙 ${coinFor(t, lv)}`;
+  });
+  $('#study-hint').textContent = `한 번에 10문제 · 정답마다 🪙 ${coinFor('add', lv)}~${coinFor('div', lv)}개 · 3연속 정답 +${streakBonus(lv)}`;
 }
 
 /* ================= 문제 생성 ================= */
@@ -712,9 +809,11 @@ function startQuiz(topic, dan = null) {
   Q = {
     topic, dan, level, problems, idx: 0,
     correct: 0, streak: 0, coins: 0, answer: '', locked: false, retry: false,
+    review: levelDoneToday(level),   // 오늘 이미 완료한 단계 → 복습(코인 절반)
     stageBefore: stageIndex(),
   };
   go('quiz');
+  if (Q.review) toast('오늘 이미 푼 단계라서 복습이에요 (코인 절반)');
 }
 
 function renderQuiz() {
@@ -790,8 +889,9 @@ function submitAnswer() {
   const stat = S.stats.byTopic[p.topic];
   if (ok) {
     Q.correct++; Q.streak++;
-    let gain = 10;
-    if (Q.streak >= 3) gain += 5;
+    let gain = coinFor(p.topic, Q.level);
+    if (Q.streak >= 3) gain += streakBonus(Q.level);
+    if (Q.review) gain = Math.ceil(gain * REVIEW_RATE);
     Q.coins += gain; S.coins += gain; S.xp += 5;
     S.stats.correct++; stat[0]++;
     SFX.correct();
@@ -826,10 +926,21 @@ function finishQuiz() {
   const c = Q.correct;
   const stars = c >= 9 ? 3 : c >= 7 ? 2 : 1;
   const rewardKey = stars === 3 ? 'cake' : stars === 2 ? 'cookie' : 'apple';
-  const bonus = stars * 10;
+  let bonus = starBonus(stars, Q.level);
+  if (Q.review) bonus = Math.ceil(bonus * REVIEW_RATE);
   S.coins += bonus;
   S.food[rewardKey]++;
   S.stats.sessions++;
+  // 학습 사다리: 오늘 이 단계 첫 완료면 다음 단계 열기
+  ensureDaily();
+  const firstToday = S.daily.done[Q.level] === 0;
+  S.daily.done[Q.level]++;
+  let unlockMsg = '';
+  if (firstToday && Q.level < 3) { S.settings.level = Q.level + 1; unlockMsg = `🔓 ${Q.level + 1}단계가 열렸어요! 다음엔 더 많은 코인을 받아요.`; }
+  else if (firstToday && Q.level === 3) unlockMsg = '🏆 오늘 3단계까지 모두 완료!';
+  const unlockEl = $('#result-unlock');
+  unlockEl.textContent = unlockMsg;
+  unlockEl.classList.toggle('hidden', !unlockMsg);
   const today = todayStr();
   if (S.stats.lastPlayDate !== today) {
     S.stats.streak = S.stats.lastPlayDate === yesterdayStr() ? S.stats.streak + 1 : 1;
@@ -1057,7 +1168,11 @@ function bind() {
   $('#home-pet').onclick = () => { react('happy', 1200); popPet($('#home-pet')); SFX.tap(); $('#home-speech').textContent = petSpeech(); };
 
   // 공부 선택
-  $$('#level-segment button').forEach(b => b.onclick = () => { S.settings.level = +b.dataset.level; save(); SFX.tap(); renderStudy(); });
+  $$('#level-segment button').forEach(b => b.onclick = () => {
+    const l = +b.dataset.level;
+    if (!levelUnlocked(l)) { SFX.wrong(); toast(`먼저 ${l - 1}단계를 오늘 한 번 다 풀면 열려요 🔒`); return; }
+    S.settings.level = l; save(); SFX.tap(); renderStudy();
+  });
   $$('.topic-card').forEach(b => b.onclick = () => { SFX.tap(); startQuiz(b.dataset.topic); });
 
   // 퀴즈

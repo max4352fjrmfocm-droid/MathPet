@@ -809,3 +809,48 @@ body.night .scene .stars {
 @keyframes twinkle { 0%, 100% { opacity: 0.9; } 50% { opacity: 0.4; } }
 body.night .speech { background: #fff9dd; }
 body.night .pet-stage .pet-level, body.night .pet-stage .xp-text { color: #5b6a52; }
+
+/* ===== 팔다리 움직임 (이미지 조각 인형) ===== */
+.puppet { position: relative; display: inline-block; }
+.puppet img.base { visibility: hidden; }
+.puppet .part { position: absolute; left: 0; top: 0; will-change: transform; }
+.puppet.legend-glow { filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 22px #ffb703); }
+.p-head { transform-origin: 50% 100%; }
+.p-footL, .p-footR { transform-origin: 50% 0; }
+.p-paws { transform-origin: 50% 50%; }
+.p-armL { transform-origin: 100% 100%; }
+.p-armR { transform-origin: 0 100%; }
+/* 가만히 있을 때: 고개 살짝, 앞발 비비기, 든 손 흔들기 */
+.pet-wrap .p-head { animation: headIdle 4s ease-in-out infinite; }
+.pet-wrap .p-paws { animation: pawRub 2.4s ease-in-out infinite; }
+.pet-wrap .p-armL { animation: waveL 1.8s ease-in-out infinite; }
+/* 걷기: 발 번갈아 딛기 + 고개 까딱 */
+.pet-wrap.walking .p-footL { animation: stepA 0.38s ease-in-out infinite; }
+.pet-wrap.walking .p-footR { animation: stepB 0.38s ease-in-out infinite; }
+.pet-wrap.walking .p-head { animation: headWalk 0.38s ease-in-out infinite; }
+/* 만세(기쁨): 두 팔 흔들기 + 발 동동 */
+.pet-wrap.pose-happy .p-armL { animation: cheerL 0.45s ease-in-out infinite; }
+.pet-wrap.pose-happy .p-armR { animation: cheerR 0.45s ease-in-out infinite; }
+.pet-wrap.pose-happy .p-footL { animation: stepA 0.45s ease-in-out infinite; }
+.pet-wrap.pose-happy .p-footR { animation: stepB 0.45s ease-in-out infinite; }
+/* 먹기: 고개 끄덕 + 앞발 오르락내리락 */
+.pet-wrap.pose-eat .p-head { animation: nod 0.5s ease-in-out infinite; }
+.pet-wrap.pose-eat .p-paws { animation: pawEat 0.5s ease-in-out infinite; }
+/* 갸웃 */
+.pet-wrap.wiggle .p-head { animation: headTilt 0.9s ease-in-out; }
+@keyframes headIdle { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-2.5deg); } 60% { transform: rotate(2deg); } }
+@keyframes pawRub { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(2px); } }
+@keyframes waveL { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-9deg); } }
+@keyframes stepA { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-5px) rotate(-8deg); } }
+@keyframes stepB { 0%, 100% { transform: translateY(-5px) rotate(8deg); } 50% { transform: translateY(0) rotate(0); } }
+@keyframes headWalk { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg) translateY(-1px); } }
+@keyframes cheerL { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-13deg); } }
+@keyframes cheerR { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(13deg); } }
+@keyframes nod { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(3deg) translateY(1px); } }
+@keyframes pawEat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+@keyframes headTilt { 0%, 100% { transform: rotate(0); } 30% { transform: rotate(-12deg); } 70% { transform: rotate(8deg); } }
+
+/* ===== 공부 선택: 단계 잠금·코인 표시 ===== */
+.segment button.locked { opacity: 0.5; }
+.topic-card .t-coin { font-size: 14px; font-weight: 800; color: #8a6d00; background: rgba(255, 255, 255, 0.65); padding: 2px 9px; border-radius: 10px; }
+.result-line.unlock { color: var(--primary-dark); font-weight: 900; font-size: 17px; }
